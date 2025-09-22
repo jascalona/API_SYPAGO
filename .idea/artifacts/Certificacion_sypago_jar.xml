@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Certificacion_sypago:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Certificacion_sypago_jar</output-path>
+    <root id="archive" name="Certificacion_sypago.jar">
+      <element id="module-output" name="Certificacion_sypago" />
+    </root>
+  </artifact>
+</component>
