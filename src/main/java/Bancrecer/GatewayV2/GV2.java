@@ -67,7 +67,7 @@ public class GV2 {
      */
 
     public static String getStatusReports(String username, String password, String baseUrl, String transactionId) throws IOException{
-        String  auth = username + ";" + password;
+        String  auth = username + ":" + password;
         String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
 
 
