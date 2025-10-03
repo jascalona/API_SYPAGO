@@ -1,0 +1,37 @@
+DOCKER
+
+Listar todos contenedores: sudo docker ps
+
+Listar propiedades de un contenedor: docker inspect <ID_o_Nombre_del_Contenedor>
+
+
+
+Filtrar contenedores por nombre Parcial: sudo docker -a --filter "name=nombre_contenedor"
+
+Filtra por el ID parcial o completo del contenedor: sudo docker -a --filter "id="
+
+Filtrar por numero de puerto: docker ps --filter "publish=8080/tcp"
+
+Filtra por el estado del contenedor (ej: running, exited, created, paused, restarting):  sudo docker ps -a --filter "status=running"
+
+
+Detener un Contenedor: sudo docker stop <ID_o_Nombre_del_Contenedor>
+
+Detener un contenedor de forma forzada: sudo docker kill <ID_o_Nombre_del_Contenedor>
+
+
+Pausar un contenedor: sudo docker pause: <ID_o_Nombre_del_Contenedor>
+
+
+Levantar un contenedor antes detenido: docker start <ID_o_Nombre_del_Contenedor>
+
+
+Iniciar un contenedor: sudo docker run: <ID_o_Nombre_del_Contenedor>
+
+Levantar un servidor web Nginx con el nombre mi-web, en segundo plano, y mapeando el puerto 80 del contenedor al puerto 8080 de tu máquina: docker run -d --name mi-web -p 8080:80 nginx
+
+Reiniciar contenedor: sudo docker restart <ID_o_Nombre_del_Contenedor>
+
+
+
+
