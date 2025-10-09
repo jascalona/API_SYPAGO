@@ -129,7 +129,7 @@ public class GV2 {
         public static void main(String[] args) {
             String username = "sygateway_user";
             String password = "sB5I2lRO5Jxh1ia47S7KvnyLR";
-            String transactionId = "5C8E0A0098FE";
+            String transactionId = "BB0C25A2D35A";
 
             //URL Base para el Endpoint
             String baseUrl = "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction";
