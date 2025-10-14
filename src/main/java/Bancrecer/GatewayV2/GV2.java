@@ -59,7 +59,7 @@ public class GV2 {
      *
      * @param username El nombre de usuario para la autenticación básica.
      * @param password La contraseña para la autenticación básica.
-     * @param baseUrl La URL base del endpoint de la API (por ejemplo, "https://10.0.62.20:8088/api/v1/transaction/").
+     * @param baseUrl La URL base del endpoint de la API (por ejemplo, "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction/").
      * @param transactionId El ID de la transacción que se incluirá en los parámetros de la URL.
      * @return Un String que contiene la respuesta JSON del servidor si la solicitud es exitosa (HTTP 200 OK).
      * @throws IOException Si ocurre un error de E/S durante la solicitud HTTP.
@@ -129,7 +129,7 @@ public class GV2 {
         public static void main(String[] args) {
             String username = "sygateway_user";
             String password = "sB5I2lRO5Jxh1ia47S7KvnyLR";
-            String transactionId = "BB0C25A2D35A";
+            String transactionId = "E4BCFF4A122E";
 
             //URL Base para el Endpoint
             String baseUrl = "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction";
