@@ -44,7 +44,7 @@
             "Nb": "${=new org.apache.commons.lang.RandomStringUtils().randomAlphanumeric(8)}"
         }
     ]
-}</con:request><con:originalUri>http://10.0.62.20/sypago/gateway/api/v1/init</con:originalUri><con:credentials><con:username/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="transaction GV2" path="/api/v1/transaction" id="5176259f-ccaf-4f1e-9238-9d668eb682b4"><con:settings/><con:parameters/><con:method name="Method 1" id="58d27b0e-7bd1-4540-a784-cb60e0e03aa8" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>401 409 400 500</con:status><con:params/><con:element xmlns:tran="https://10.0.62.20/api/v1/transaction">tran:Fault</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>201 202</con:status><con:params/><con:element xmlns:tran="https://10.0.62.20/api/v1/transaction">tran:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html</con:mediaType><con:status>502</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.0.62.20:8088</con:endpoint><con:request>{
+}</con:request><con:originalUri>http://10.0.62.20/sypago/gateway/api/v1/init</con:originalUri><con:credentials><con:username/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource><con:resource name="transaction GV2" path="/api/v1/transaction" id="5176259f-ccaf-4f1e-9238-9d668eb682b4"><con:settings/><con:parameters/><con:method name="Method 1" id="58d27b0e-7bd1-4540-a784-cb60e0e03aa8" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>401 409 400 500</con:status><con:params/><con:element xmlns:tran="https://10.0.62.20/api/v1/transaction">tran:Fault</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>201 202</con:status><con:params/><con:element xmlns:tran="https://10.0.62.20/api/v1/transaction">tran:Response</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html</con:mediaType><con:status>502 400</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://10.0.62.20:8088</con:endpoint><con:request>{
     "TraceId": "2B1455C1302E",
     "TransactionId": "{{$transactionId}}",
     "UserId": "371D2E119F49",
@@ -3579,7 +3579,7 @@ def ClienteBancaribe =  new SYPAGOBancaribe();
 	def Rsn = jsonR.TrnStRp.Rsn; 
 	log.info Rsn
 	//assert  Rsn== "AG10" //Assert condicion que verifica que el valor sea igual a lo definido
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="fb19db7f-88bd-494b-a722-00376582b361" name="GW2 Bancaribe"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f580a77d-d1fb-4af9-be2e-81937e649baa" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="9b3e9561-0a2b-456e-9233-28cd0af60666"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite id="fb19db7f-88bd-494b-a722-00376582b361" name="GW Bancaribe"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f580a77d-d1fb-4af9-be2e-81937e649baa" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="9b3e9561-0a2b-456e-9233-28cd0af60666"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
 
 /*
 *  Para invocar a las variables desde el msj JSON de forma statica haciendo se debe hacer referencia al numero del elemento deseado
@@ -10044,7 +10044,46 @@ assert status == "RJCT"; // Aserción para el campo Status
 def rejectedCode = jsonResponse.RejectedCode;
 log.info("Código de rechazo: " + rejectedCode);
 assert rejectedCode == "MD01"; // Aserción para el campo RejectedCode
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="a5b75414-bfbf-4586-90ba-c6a5ac5747d7" name="GV2-VOL"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>50</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>33333</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancaribe</con:value></con:property><con:property><con:name>id</con:name><con:value>J501617694  </con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01140560635600070438</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0114</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>C000021</con:value></con:property></con:properties></con:testSuite><con:testSuite id="92bfccd4-f388-4805-b1f7-8bfe23b02b9a" name="GW2 Bancrener"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="a47c30e1-3e74-4d65-84c4-c61d38cda0c0" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="b9080a9c-1300-4225-a124-17da7229137f"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="a5b75414-bfbf-4586-90ba-c6a5ac5747d7" name="GV2-VOL"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>50</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>33333</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="81a76d78-6fc2-4b99-a0d5-4781de9916fa" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="SOLID_OTP" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="SOLID_OTP" id="fa89d223-573b-4dfe-afb1-2f51bb971f48"><con:settings/><con:config service="http://10.0.62.20:8086" methodName="Method 1" resourcePath="/api/v1/token/otp/generate" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLID_OTP" id="c1ae596d-6d21-4402-a0a8-eb5f4238c551" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Authorization" value="Basic c3lnYXRld2F5X3VzZXI6c0I1STJsUk81SnhoMWlhNDdTN0t2bnlMUg==" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.0.62.20:8088</con:endpoint><con:request>{
+   "AuthstnReq":{
+      "GrpHdr":{
+         "MsgId":"0114012025052608091300000375",
+         "CreDtTm":"2025-05-26T08:09:13.746372"
+      },
+      "Initn":[
+         {
+            "MndtRltdInf":{
+               "LclInstrm":"050",
+               "MndtId":"0114012025052608091300000375"
+            },
+            "Amount":{
+               "Ccy":"VES",
+               "Amt":50
+            },
+            "DbtrAgt":"0114",
+            "DbtrAcct":{
+               "Tp":"CNTA",
+               "Id":"01140165101659096958"
+            },
+            "Dbtr":{
+               "Nm":"BANCRECER",
+               "Id":"V13951863",
+               "SchmeNm":"SCID"
+            },
+            "CdtrAgt":"9999",
+            "Cdtr":{
+               "Nm":"CUENTA BANCARIBE",
+               "Id":"J501617694",
+               "SchmeNm":"SRIF"
+            },
+            "CdtrAcct":{
+               "Tp":"CNTA",
+               "Id":"01140560635600070438"
+            }
+         }
+      ]
+   }
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/token/otp/generate</con:originalUri><con:assertion type="Invalid HTTP Status Codes" id="cb527bf3-dcbb-497d-b6fa-f3f45dc2ea66" name="Invalid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:credentials><con:username>sygateway_user</con:username><con:password>sB5I2lRO5Jxh1ia47S7KvnyLR</con:password><con:domain/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancaribe</con:value></con:property><con:property><con:name>id</con:name><con:value>J501617694  </con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01140560635600070438</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0114</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>C000021</con:value></con:property></con:properties></con:testSuite><con:testSuite id="92bfccd4-f388-4805-b1f7-8bfe23b02b9a" name="GW2 Bancrener"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="a47c30e1-3e74-4d65-84c4-c61d38cda0c0" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="b9080a9c-1300-4225-a124-17da7229137f"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
 
 /*
 *  Para invocar a las variables desde el msj JSON de forma statica haciendo se debe hacer referencia al numero del elemento deseado
@@ -16685,7 +16724,7 @@ log.info("Código de rechazo: " + rejectedCode);
       "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
       "Account":{
          "Tp":"CNTA",
-         "Id":"01680028785100594097"
+         "Id":"${#TestSuite#CNTA}"
       },
       "Document":{
          "Nm":"Orlando Empresa",
@@ -20178,139 +20217,6 @@ switch (statusCode){
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-0168-account-id-Invalido" id="56aeb0e7-f2e9-4e4f-8862-4d5d4bb75831" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-0168-account-id-Invalido" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"050",
-   "SubProduct":"002",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"01680028785100594099"
-      },
-      "Document":{
-         "Nm":"Orlando Empresa",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"01680031785100641177"
-      },
-      "Document":{
-         "Nm":"Juridico",
-         "Id":"J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == ""		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
 </scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-0168-account-id-Mayor-20" id="cb43ad9e-a0c7-418d-8bda-1fd1490237df" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-0168-account-id-Mayor-20" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
    "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
    "UserUniqueId":"5C8E0A4171FE",
@@ -20743,7 +20649,7 @@ switch (statusCode){
       "Document":{
          "Nm":"${#TestSuite#Nm}",
          "Id":"V90432547",
-         "SchmeNm":"SCID"
+         "SchmeNm":"SRIF"
       },
       "Concept":"CONCEPTO-18AAEFDEFAEF"
    },
@@ -20758,7 +20664,7 @@ switch (statusCode){
       "Document":{
          "Nm":"${=context.listRecep [${=context.ListRandom}].nombre}",
          "Id": "J6791034667",
-         "SchmeNm":"SRIF"
+         "SchmeNm":"SCID"
       },
       "Concept":"Solicitud OTP"
    },
@@ -23105,7 +23011,7 @@ switch (statusCode){
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="553b6427-c191-46c7-987c-41accc8ed403" name="GW-VOL-OTP"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>20</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>300</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="70fba2c1-2208-4217-969e-038a3a13b0fb" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Credito" searchProperties="true"><con:settings/><con:testStep type="groovy" name="InsertData" id="d8ab4509-ae05-476e-853e-ba9f16966047" disabled="true"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="553b6427-c191-46c7-987c-41accc8ed403" name="GW-VOL-OTP"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>20</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>300</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="70fba2c1-2208-4217-969e-038a3a13b0fb" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Iniciacion-Credito" searchProperties="true"><con:settings/><con:testStep type="groovy" name="InsertData" id="d8ab4509-ae05-476e-853e-ba9f16966047"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
 
 /*
 *  Para invocar a las variables desde el msj JSON de forma statica haciendo se debe hacer referencia al numero del elemento deseado
@@ -23137,14 +23043,14 @@ context.ListRandom = randomCliente;
 
 
 
-</script></con:config></con:testStep><con:testStep type="restrequest" name="GV2-INT-CRED-0168" id="d436ee19-91d8-4897-846e-6ce4d6a5c74b"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-INT-CRED-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+</script></con:config></con:testStep><con:testStep type="restrequest" name="GV2-INT-CRED-0168" id="d436ee19-91d8-4897-846e-6ce4d6a5c74b" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-INT-CRED-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
    "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
    "UserUniqueId":"5C8E0A4171FE",
    "UserReferenceId":"18AAEFDEFAEF",
    "UserGroupId":"E5709C7B2650",
    "CreationDate":"2025-05-23T10:08:41.362508",
    "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.UIDD(12)}",
+   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
    "SyPagoCreationChannel":"API",
    "SyPagoAcceptanceChannel":"",
    "SypagoInitDate":"2025-05-23T10:08:41.362508",
@@ -23153,7 +23059,7 @@ context.ListRandom = randomCliente;
    "SubProduct":"220",
    "Amount":{
       "Ccy":"VES",
-      "Amt": 0.21,
+      "Amt": 0.20,
       "Commission":0
    },
    "ProductSypago":"DEBIT",
@@ -23168,8 +23074,8 @@ context.ListRandom = randomCliente;
          "Id":"01680028785100594099"
       },
       "Document":{
-         "Nm":"${#TestSuite#Nm}",
-         "Id":"${#TestSuite#id}",
+         "Nm":"Emisior",
+         "Id":"J000003505",
          "SchmeNm":"SRIF"
       },
       "Concept":"CONCEPTO-18AAEFDEFAEF"
@@ -23179,8 +23085,8 @@ context.ListRandom = randomCliente;
       "UserId":"",
       "LinkUserId":"",
       "Account":{
-         "Tp":"CELE",
-         "Id":"04143987916"
+         "Tp":"CNTA",
+         "Id":"01680031785100641178"
       },
       "Document":{
          "Nm":"Bancrecer J",
@@ -23203,7 +23109,7 @@ import net.sf.json.*
 import net.sf.json.groovy.*
 import Utiliti.StatusReportCred;
 
-sleep(1000)
+sleep(2000)
 // Instancia de la clase Java GV2
 def Cliente = new GV2();
 
@@ -23250,8 +23156,7 @@ switch (statusCode){
 				assert TxSt == "RJCT"
 				def Rns = response.RejectedCode
 				log.info (TxSt + "/" + Rns)
-				assert Rns == ""
-				
+				assert Rns == ""		
 			}
 			else{
 				log.info(TxSt)
@@ -23271,7 +23176,7 @@ switch (statusCode){
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-INT-CRED-0168-E" id="70794bef-978c-4a57-ab4d-c8ff31bf2a16" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-INT-CRED-0168-E" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-0168" id="ffa85bc7-bc14-4198-a407-a88a2b73da08"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
    "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
    "UserUniqueId":"5C8E0A4171FE",
    "UserReferenceId":"18AAEFDEFAEF",
@@ -23283,17 +23188,17 @@ switch (statusCode){
    "SyPagoAcceptanceChannel":"",
    "SypagoInitDate":"2025-05-23T10:08:41.362508",
    "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product": "040",
-   "SubProduct":"220",
+   "Product":"050",
+   "SubProduct":"002",
    "Amount":{
       "Ccy":"VES",
-      "Amt": 0.22,
+      "Amt":0.30,
       "Commission":0
    },
    "ProductSypago":"DEBIT",
    "SubProductSypago":"SYPAGO",
    "ApprovalAgent":"OTHE",
-   "IssuingAgent":"${#TestSuite#codBanco}",
+   "IssuingAgent":"0168",
    "IssuingUser":{
       "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
       "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
@@ -23302,26 +23207,26 @@ switch (statusCode){
          "Id":"01680028785100594099"
       },
       "Document":{
-         "Nm":"${#TestSuite#Nm}",
-         "Id":"${#TestSuite#id}",
+         "Nm":"Orlando Empresa",
+         "Id":"J000003505",
          "SchmeNm":"SRIF"
       },
       "Concept":"CONCEPTO-18AAEFDEFAEF"
    },
-   "ReceivingAgent":"${#TestSuite#codBanco}",
+   "ReceivingAgent":"0168",
    "ReceivingUser":{
       "UserId":"",
       "LinkUserId":"",
       "Account":{
-         "Tp":"CNTA",
-         "Id":"01680020125101638135"
+         "Tp":"CELE",
+         "Id":"04242740828"
       },
       "Document":{
-         "Nm":"Bancrecer E",
-         "Id": "E84477736",
-         "SchmeNm":"SCID"
+         "Nm":"Juridico",
+         "Id":"J400881730",
+         "SchmeNm":"SRIF"
       },
-      "Concept":"Solicitud OTP"
+      "Concept":""
    },
    "PayKey":"27892664"
 }</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
@@ -23384,8 +23289,7 @@ switch (statusCode){
 				assert TxSt == "RJCT"
 				def Rns = response.RejectedCode
 				log.info (TxSt + "/" + Rns)
-				assert Rns == ""
-				
+				assert Rns == "TKCM"		
 			}
 			else{
 				log.info(TxSt)
@@ -23672,7 +23576,7 @@ switch (statusCode){
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="e1536fe8-3b64-4e89-b6d8-415850becc0e" name="GW-VL-CRED"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>10</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>3600</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>1000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="891f2fd2-09d2-40ee-a809-315045353c93" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="SOLI-OTP" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="restrequest" name="SOLI-OTP-J-0168" id="a5e730e9-92e1-48a6-aaef-dc82402b70c5"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-J-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="e1536fe8-3b64-4e89-b6d8-415850becc0e" name="GW-VL-CRED"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>5</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>400</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type><con:config><testDelay>1000</testDelay><randomFactor>0.5</randomFactor></con:config></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="891f2fd2-09d2-40ee-a809-315045353c93" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="SOLI-OTP" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="restrequest" name="SOLI-OTP-J-0168" id="a5e730e9-92e1-48a6-aaef-dc82402b70c5" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-J-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
    "AuthstnReq":{
       "GrpHdr":{
          "MsgId":"9999012025052608091300000375",
@@ -23682,521 +23586,7 @@ switch (statusCode){
          {
             "MndtRltdInf":{
                "LclInstrm":"050",
-               "MndtId":"01682025052608091300000375"
-            },
-            "Amount":{
-               "Ccy":"VES",
-               "Amt":1
-            },
-            "DbtrAgt":"0168",
-            "DbtrAcct":{
-               "Tp":"CELE",
-               "Id":"04143987916"
-            },
-            "Dbtr":{
-               "Nm":"Juridico",
-               "Id":"J400881730",
-               "SchmeNm":"SRIF"
-            },
-            "CdtrAgt":"0168",
-            "Cdtr":{
-               "Nm":"Emisor",
-               "Id":"J000003505",
-               "SchmeNm":"SRIF"
-            },
-            "CdtrAcct":{
-               "Tp":"CNTA",
-               "Id":"01680028785100594099"
-            }
-         }
-      ]
-   }
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>202</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-		case 202:
-		log.info "StatusCode:" + statusCode + "/Solicitud Enviada con exito!" 
-		assert statusCode == 202;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-J-0168" id="1892269e-446c-402e-b714-0cc06289bfec" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-J-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"050",
-   "SubProduct":"002",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"${#TestSuite#CNTA}"
-      },
-      "Document":{
-         "Nm":"Emisor",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CELE",
-         "Id":"04129857729"
-      },
-      "Document":{
-         "Nm":"Juridico",
-         "Id":"J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"47379894"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-//sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="SOLI-OTP-P-0168" id="67fa9741-f009-4af4-a9a4-6dfa6fe33ee3" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-P-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "AuthstnReq":{
-      "GrpHdr":{
-         "MsgId":"9999012025052608091300000375",
-         "CreDtTm":"2025-05-26T08:09:13.746372"
-      },
-      "Initn":[
-         {
-            "MndtRltdInf":{
-               "LclInstrm":"050",
-               "MndtId":""
-            },
-            "Amount":{
-               "Ccy":"VES",
-               "Amt":1
-            },
-            "DbtrAgt":"0172",
-            "DbtrAcct":{
-               "Tp":"CNTA",
-               "Id":"01680020125101638138"
-            },
-            "Dbtr":{
-               "Nm":"Extranjero",
-               "Id":"E84477736",
-               "SchmeNm":"SCID"
-            },
-            "CdtrAgt":"0168",
-            "Cdtr":{
-               "Nm":"Emisor",
-               "Id":"J000003505",
-               "SchmeNm":"SRIF"
-            },
-            "CdtrAcct":{
-               "Tp":"CNTA",
-               "Id":"01680028785100594099"
-            }
-         }
-      ]
-   }
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>202</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-		case 202:
-		log.info "StatusCode:" + statusCode + "/Solicitud Enviada con exito!" 
-		assert statusCode == 202;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-E-0168" id="53820f05-a33e-43c1-90bf-22d6b92adbc1" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-E-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"050",
-   "SubProduct":"002",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"${#TestSuite#CNTA}"
-      },
-      "Document":{
-         "Nm":"Emisor",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CELE",
-         "Id":"04129854529"
-      },
-      "Document":{
-         "Nm":"Extranjero",
-         "Id":"E84477736",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"47379894"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-//sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="798b405a-1615-4254-914d-95bde2509dbe" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Desafiliasion" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="SOLI-OTP-J-0168" id="93cac960-221e-491a-b7f2-1ab288cfdd5a"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-J-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "AuthstnReq":{
-      "GrpHdr":{
-         "MsgId":"0168012025052608091300000375",
-         "CreDtTm":"2025-05-26T08:09:13.746372"
-      },
-      "Initn":[
-         {
-            "MndtRltdInf":{
-               "LclInstrm":"050",
-               "MndtId":"01682025052608091300000375"
+               "MndtId":"99992025052608091300000375"
             },
             "Amount":{
                "Ccy":"VES",
@@ -24310,327 +23700,46 @@ switch (statusCode){
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-OPT-INT-0168" id="60387d73-5480-4b94-b2ed-72ed057870ac"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"050",
-   "SubProduct":"002",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"${#TestSuite#CNTA}"
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="SOLI-OTP-P-0168" id="67fa9741-f009-4af4-a9a4-6dfa6fe33ee3"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-P-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+   "AuthstnReq":{
+      "GrpHdr":{
+         "MsgId":"9999012025052608091300000375",
+         "CreDtTm":"2025-05-26T08:09:13.746372"
       },
-      "Document":{
-         "Nm":"Orlando Empresa",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CELE",
-         "Id":"04242740828"
-      },
-      "Document":{
-         "Nm":"Juridico",
-         "Id":"J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-//sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="GV2-INT-CRED-0168" id="b3461498-ba2d-4789-b252-026b9f681f53" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-INT-CRED-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product": "040",
-   "SubProduct":"220",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt": 0.20,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"${#TestSuite#codBanco}",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"01680028785100594099"
-      },
-      "Document":{
-         "Nm":"${#TestSuite#Nm}",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"${#TestSuite#codBanco}",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"01680031785100641178"
-      },
-      "Document":{
-         "Nm":"Bancrecer J",
-         "Id": "J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"Solicitud OTP"
-   },
-   "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-//sleep(2000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info(TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (TxSt + "/" + Rns)
-				assert Rns == ""
-				
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancrecer Emisor</con:value></con:property><con:property><con:name>id</con:name><con:value>J000003505</con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01680028785100594099</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0168</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>NA</con:value></con:property></con:properties></con:testSuite><con:testSuite id="cdbaa09e-f4a2-41fd-8154-4f83b422df9e" name="Componentes"><con:description>TestSuite generated for REST Service [http://10.0.62.20:8086]</con:description><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="574d8ffc-fe80-4e63-a73e-df97fb562aab" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="MongoDB" searchProperties="true"><con:description>TestCase generated for REST Resource [bancrecer] located at [/api/v1/transaction]</con:description><con:settings/><con:testStep type="restrequest" name="CRED-INT-0168" id="13b12756-d46e-4d21-9e87-b1e16b50c84d" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="CRED-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"040",
-   "SubProduct":"220",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"${#TestSuite#CNTA}"
-      },
-      "Document":{
-         "Nm":"Emisor Bancrecer",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CELE",
-         "Id":"04242740828"
-      },
-      "Document":{
-         "Nm":"Juridico",
-         "Id":"J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>500</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+      "Initn":[
+         {
+            "MndtRltdInf":{
+               "LclInstrm":"050",
+               "MndtId":"99992025052608091300000375"
+            },
+            "Amount":{
+               "Ccy":"VES",
+               "Amt":1
+            },
+            "DbtrAgt":"0168",
+            "DbtrAcct":{
+               "Tp":"CELE",
+               "Id":"04242740828"
+            },
+            "Dbtr":{
+               "Nm":"Juridico",
+               "Id":"J400881730",
+               "SchmeNm":"SRIF"
+            },
+            "CdtrAgt":"0168",
+            "Cdtr":{
+               "Nm":"Emisor",
+               "Id":"J000003505",
+               "SchmeNm":"SRIF"
+            },
+            "CdtrAcct":{
+               "Tp":"CNTA",
+               "Id":"01680028785100594099"
+            }
+         }
+      ]
+   }
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>202</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
 import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
 
 import net.sf.*
@@ -24706,11 +23815,140 @@ switch (statusCode){
 		assert statusCode == statusCode;
 		break;
 
+		case 202:
+		log.info "StatusCode:" + statusCode + "/Solicitud Enviada con exito!" 
+		assert statusCode == 202;
+		break;
+
 	default:
 		log.info("Ha ocurrido un Error: " + statusCode)
 		break;
 	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="99490735-5e88-42b2-821f-33a353555be0" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="MS" searchProperties="true"><con:description>TestCase generated for REST Resource [bancrecer] located at [/api/v1/transaction]</con:description><con:settings/><con:testStep type="restrequest" name="GW-CRED-INT-0168" id="172e5e05-8a09-4494-9998-9e87bc188f79"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GW-CRED-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="restrequest" name="SOLI-OTP-E-0168" id="8c4cd5fd-5f94-4374-92fd-6dd0e7af3c04"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/token/otp/generate" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLI-OTP-E-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+   "AuthstnReq":{
+      "GrpHdr":{
+         "MsgId":"0168012025052608091300000375",
+         "CreDtTm":"2025-05-26T08:09:13.746372"
+      },
+      "Initn":[
+         {
+            "MndtRltdInf":{
+               "LclInstrm":"050",
+               "MndtId":"01682025052608091300000375"
+            },
+            "Amount":{
+               "Ccy":"VES",
+               "Amt":1
+            },
+            "DbtrAgt":"0168",
+            "DbtrAcct":{
+               "Tp":"CELE",
+               "Id":"04242740828"
+            },
+            "Dbtr":{
+               "Nm":"Extranjero",
+               "Id":"E84477736",
+               "SchmeNm":"SCID"
+            },
+            "CdtrAgt":"0168",
+            "Cdtr":{
+               "Nm":"Emisor",
+               "Id":"J000003505",
+               "SchmeNm":"SRIF"
+            },
+            "CdtrAcct":{
+               "Tp":"CNTA",
+               "Id":"01680028785100594099"
+            }
+         }
+      ]
+   }
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>202</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
+
+import net.sf.*
+import net.sf.json.*
+import net.sf.json.groovy.*
+
+import com.eviware.soapui.support.XmlHolder
+import net.sf.*
+import net.sf.json.*
+import net.sf.json.groovy.*
+import Utiliti.StatusReportCred;
+
+sleep(2000)
+// Instancia de la clase Java GV2
+def Cliente = new GV2();
+
+//Llamar el valor de TransactioId
+    def requestContent = new String(messageExchange.rawRequestData)
+    def jsonStartIndex = requestContent.indexOf("{")
+    def jsonContent = requestContent.substring(jsonStartIndex)
+    //log.info  jsonContent  //Imprimir el msj de solicitud
+    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
+
+// Definir el transaction_id que deseas consultar.
+// Este debe coincidir con el ID que esperas en la respuesta.
+def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
+
+
+//Obtener el codigo de estado
+def statusCode = messageExchange.responseStatusCode
+
+//Invocamos el nombre del paso de prueba
+String nameSteps = context.currentStep.name.toString();
+
+//Mensaje para averias de tipo, 409, 400, 401
+def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
+
+switch (statusCode){
+	case 201:
+		def responseJsonString = Cliente.getStatusReports(
+		    "sygateway_user",
+		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
+		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
+		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
+		);
+
+		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
+
+		def TxSt = response.Status
+
+			if(TxSt == "ACCP"){
+				log.info(TxSt)
+				assert TxSt == "ACCP";
+			}
+			else if(TxSt == "RJCT"){
+				
+				assert TxSt == "RJCT"
+				def Rns = response.RejectedCode
+				log.info (TxSt + "/" + Rns)
+				assert Rns == "TKCM"		
+			}
+			else{
+				log.info(TxSt)
+			}
+			
+		break;
+
+		case 400:
+	 	case 401:
+		case 409:
+		
+		log.info "StatusCode: " + statusCode + "/" + msj;
+		assert statusCode == statusCode;
+		break;
+
+		case 202:
+		log.info "StatusCode:" + statusCode + "/Solicitud Enviada con exito!" 
+		assert statusCode == 202;
+		break;
+
+	default:
+		log.info("Ha ocurrido un Error: " + statusCode)
+		break;
+	}
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancrecer Emisor</con:value></con:property><con:property><con:name>id</con:name><con:value>J000003505</con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01680028785100594099</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0168</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>NA</con:value></con:property></con:properties></con:testSuite><con:testSuite id="cdbaa09e-f4a2-41fd-8154-4f83b422df9e" name="Componentes"><con:description>TestSuite generated for REST Service [http://10.0.62.20:8086]</con:description><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="574d8ffc-fe80-4e63-a73e-df97fb562aab" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="MongoDB" searchProperties="true"><con:description>TestCase generated for REST Resource [bancrecer] located at [/api/v1/transaction]</con:description><con:settings/><con:testStep type="restrequest" name="CRED-INT-0168" id="13b12756-d46e-4d21-9e87-b1e16b50c84d"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="CRED-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
    "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
    "UserUniqueId":"5C8E0A4171FE",
    "UserReferenceId":"18AAEFDEFAEF",
@@ -24763,7 +24001,7 @@ switch (statusCode){
       "Concept":""
    },
    "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>500</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
 import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
 
 import net.sf.*
@@ -24776,7 +24014,7 @@ import net.sf.json.*
 import net.sf.json.groovy.*
 import Utiliti.StatusReportCred;
 
-sleep(3000)
+sleep(2000)
 // Instancia de la clase Java GV2
 def Cliente = new GV2();
 
@@ -25089,139 +24327,6 @@ switch (statusCode){
 				assert TxSt == "RJCT"
 				def Rns = response.RejectedCode
 				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
-			}
-			else{
-				log.info(TxSt)
-			}
-			
-		break;
-
-		case 400:
-	 	case 401:
-		case 409:
-		
-		log.info "StatusCode: " + statusCode + "/" + msj;
-		assert statusCode == statusCode;
-		break;
-
-	default:
-		log.info("Ha ocurrido un Error: " + statusCode)
-		break;
-	}
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="301f02bc-0a76-49e1-94ad-70c747cbe618" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="PLUGIN" searchProperties="true"><con:description>TestCase generated for REST Resource [bancrecer] located at [/api/v1/transaction]</con:description><con:settings/><con:testStep type="restrequest" name="GW-CRED-INT-0168" id="34e218f5-6acf-4d14-8fd6-0e18ed27dc4b"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GW-CRED-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
-   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-   "UserUniqueId":"5C8E0A4171FE",
-   "UserReferenceId":"18AAEFDEFAEF",
-   "UserGroupId":"E5709C7B2650",
-   "CreationDate":"2025-05-23T10:08:41.362508",
-   "TraceId":"5C8E0A4171FE",
-   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
-   "SyPagoCreationChannel":"API",
-   "SyPagoAcceptanceChannel":"",
-   "SypagoInitDate":"2025-05-23T10:08:41.362508",
-   "SypagoProcessDate":"0001-01-01T00:00:00",
-   "Product":"040",
-   "SubProduct":"220",
-   "Amount":{
-      "Ccy":"VES",
-      "Amt":0.30,
-      "Commission":0
-   },
-   "ProductSypago":"DEBIT",
-   "SubProductSypago":"SYPAGO",
-   "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
-   "IssuingUser":{
-      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
-      "Account":{
-         "Tp":"CNTA",
-         "Id":"${#TestSuite#CNTA}"
-      },
-      "Document":{
-         "Nm":"Emisor Bancrecer",
-         "Id":"${#TestSuite#id}",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":"CONCEPTO-18AAEFDEFAEF"
-   },
-   "ReceivingAgent":"0168",
-   "ReceivingUser":{
-      "UserId":"",
-      "LinkUserId":"",
-      "Account":{
-         "Tp":"CELE",
-         "Id":"04242740828"
-      },
-      "Document":{
-         "Nm":"Juridico",
-         "Id":"J400881730",
-         "SchmeNm":"SRIF"
-      },
-      "Concept":""
-   },
-   "PayKey":"27892664"
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
-import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
-
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-
-import com.eviware.soapui.support.XmlHolder
-import net.sf.*
-import net.sf.json.*
-import net.sf.json.groovy.*
-import Utiliti.StatusReportCred;
-
-sleep(3000)
-// Instancia de la clase Java GV2
-def Cliente = new GV2();
-
-//Llamar el valor de TransactioId
-    def requestContent = new String(messageExchange.rawRequestData)
-    def jsonStartIndex = requestContent.indexOf("{")
-    def jsonContent = requestContent.substring(jsonStartIndex)
-    //log.info  jsonContent  //Imprimir el msj de solicitud
-    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
-
-// Definir el transaction_id que deseas consultar.
-// Este debe coincidir con el ID que esperas en la respuesta.
-def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
-
-
-//Obtener el codigo de estado
-def statusCode = messageExchange.responseStatusCode
-
-//Invocamos el nombre del paso de prueba
-String nameSteps = context.currentStep.name.toString();
-
-//Mensaje para averias de tipo, 409, 400, 401
-def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
-
-switch (statusCode){
-	case 201:
-		def responseJsonString = Cliente.getStatusReports(
-		    "sygateway_user",
-		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
-		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
-		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
-		);
-
-		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
-
-		def TxSt = response.Status
-
-			if(TxSt == "ACCP"){
-				log.info( statusCode + "/" + TxSt)
-				assert TxSt == "ACCP";
-			}
-			else if(TxSt == "RJCT"){
-				
-				assert TxSt == "RJCT"
-				def Rns = response.RejectedCode
-				log.info (statusCode + "/" + TxSt + "/" + Rns)
 				assert Rns == "TKCM"		
 			}
 			else{

@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
 
         String user = "jose";
-        String apiKEY = "u4M6xxNzKxMZQLHMngu3MW1gWI4O3tY7";
+        String apiKEY = "CBPlzErNPlTpoZhDNq2YnVtpfrR5U9kN";
         String apiUrl = "https://pruebas.sypago.net:8086/api/v1/auth/token";
         String client_id = "jose";
 

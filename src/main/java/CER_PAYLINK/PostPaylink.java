@@ -1,0 +1,192 @@
+package CER_PAYLINK;
+import javax.xml.crypto.Data;
+import javax.xml.transform.sax.SAXSource;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.SimpleTimeZone;
+
+public class PostPaylink
+{
+    private String internal_id;
+    private String group_id;
+    private final String API_URL_INIT = "https://pruebas.sypago.net:8086/api/v1/transaction/paylink";
+
+    public PostPaylink(String internal_id, String group_id){
+        if (internal_id == null || internal_id.trim().isEmpty()){
+            System.out.println("Error al procesar el internal_id");
+        }
+        if (group_id == null || internal_id.trim().isEmpty()){
+            System.out.println("Error al procesar el group_id");
+        }
+        this.internal_id = internal_id;
+        this.group_id = group_id;
+        System.out.println( "DESDE EL CONSTRUCTOR: "+ internal_id);
+    }
+
+    public String getInternal_id() {
+        return this.internal_id;
+    }
+
+    public String postPaylink(String token) throws IOException {
+
+        URL url = new URL(this.API_URL_INIT);
+
+        HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+
+        //Pasar el Token parea validacion
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        //Cuerpo de solicitud
+        try(DataOutputStream os = new DataOutputStream(connection.getOutputStream())){
+            //Datos
+           // String internal_id = this.internal_id;
+           // System.out.println("Desde el METODO:" + internal_id);
+            String group_id = this.group_id;
+            String bank_code = "0001";
+            String type = "CNTA";
+            String number = "00018349143957065141";
+            String typeAmo = "ALMM";
+            int amt = 1;
+            String currency = "VES";
+            int min_allow_amt = 1;
+            int max_allow_amt= 1;
+            boolean use_day_rate = false;
+            String concept = "Cobro de impuestos";
+            String sucessful_callback_url = "https://www.sypago.com/success";
+            String failed_callback_url = "https://www.sypago.com/fail";
+            String return_front_end_url = "https://www.sypago.com/return";
+            String web_hook_endpoint = "https://www.sypago.com/notification";
+            String name = "Cliente BanPlus Juridico";
+            String typeDocument_info = "J";
+            String numberR = "311845852";
+            String bank_codeR = "0174";
+            String typeR = "CELE";
+            String numberCELE = "04129854529";
+            int expiration = 300;
+            //Modelo del JSON DE INICIO
+            String jsonInputString = "{"
+                    + "\"internal_id\":\"" + this.getInternal_id() + "\","
+                    + "\"group_id\":\"" + group_id + "\","
+                    + "\"account\":{"
+                    + "\"bank_code\":\"" + bank_code + "\","
+                    + "\"type\":\"" + type + "\","
+                    + "\"number\":\"" + number + "\""
+                    + "},"
+                    + "\"amount\":{"
+                    + "\"type\":\"" + typeAmo + "\","
+                    + "\"amt\":" + amt + ","
+                    + "\"currency\":\"" + currency + "\","
+                    + "\"min_allow_amt\":" + min_allow_amt + ","
+                    + "\"max_allow_amt\":" + max_allow_amt + ","
+                    + "\"use_day_rate\":" + use_day_rate
+                    + "},"
+                    + "\"concept\":\"" + concept + "\","
+                    + "\"notification_urls\":{"
+                    + "\"sucessful_callback_url\":\"" + sucessful_callback_url + "\","
+                    + "\"failed_callback_url\":\"" + failed_callback_url + "\","
+                    + "\"return_front_end_url\":\"" + return_front_end_url + "\","
+                    + "\"web_hook_endpoint\":\"" + web_hook_endpoint + "\""
+                    + "},"
+                    + "\"receiving_user\":{"
+                    + "\"name\":\"" + name + "\","
+                    + "\"document_info\":{"
+                    + "\"type\":\"" + typeDocument_info + "\","
+                    + "\"number\":\"" + numberR + "\""
+                    + "},"
+                    + "\"account\":{"
+                    + "\"bank_code\":\"" + bank_codeR + "\","
+                    + "\"type\":\"" + typeR + "\","
+                    + "\"number\":\"" + numberCELE + "\""
+                    + "}"
+                    + "},"
+                    + "\"expiration\":" + expiration
+                    + "}";
+
+            os.writeBytes(jsonInputString);
+            os.flush();
+
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            if (responseCode == 200){
+                StringBuilder response =new StringBuilder();
+
+                try (BufferedReader reader =new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+                    String line;
+                    while ((line = reader.readLine()) != null){
+                        response.append(line);
+                    }
+                }
+                connection.disconnect();
+                return response.toString();
+            }
+            else {
+                StringBuilder responseError = new StringBuilder();
+                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()))){
+                    String line;
+                    while ((line = errorReader.readLine()) != null){
+                        responseError.append(line);
+                    }
+                }
+                catch (Exception e){
+                    return "Error: " + e.getMessage();
+                }
+                connection.disconnect();
+                return responseError.toString();
+            }
+
+        }
+    }
+
+    //Funcion para solicitar el estado del PayLink
+    public String getPaylink(String token, String apiURL) throws IOException{
+        URL url = new URL(apiURL);
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(false);
+
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        int responseCode = connection.getResponseCode();
+        System.out.println("Response Code: " + responseCode);
+
+        if (responseCode == 200){
+            StringBuffer response = new StringBuffer();
+
+            try (BufferedReader reader =new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+                String line;
+                while ((line = reader.readLine()) != null){
+                    response.append(line);
+                }
+            }
+            connection.disconnect();
+            return response.toString();
+        }
+        else {
+            StringBuilder errorResponse = new StringBuilder();
+
+            try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()))){
+                String line;
+                while ((line = errorReader.readLine())!= null){
+                    errorResponse.append(line);
+                }
+            }
+            catch (Exception e){
+                return "Error: " + e.getMessage();
+            }
+            connection.disconnect();
+            return errorResponse.toString();
+        }
+    }
+}
