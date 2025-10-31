@@ -1,4 +1,7 @@
 package CER_PAYLINK;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.xml.crypto.Data;
 import javax.xml.transform.sax.SAXSource;
 import java.io.*;
@@ -24,7 +27,6 @@ public class PostPaylink
         }
         this.internal_id = internal_id;
         this.group_id = group_id;
-        System.out.println( "DESDE EL CONSTRUCTOR: "+ internal_id);
     }
 
     public String getInternal_id() {
@@ -126,7 +128,29 @@ public class PostPaylink
                     }
                 }
                 connection.disconnect();
-                return response.toString();
+                System.out.println(response);
+                StringBuilder id = new StringBuilder();
+                //Atajar el JSON
+                try {
+                    ObjectMapper mapper =new ObjectMapper();
+                    JsonNode rootNodo = mapper.readTree(response.toString());
+
+                    JsonNode transaction_id = rootNodo.get("transaction_id");
+
+                    if (transaction_id != null){
+                        String transactionId = transaction_id.asText();
+                        id.append(transaction_id.asText());
+                    }
+                    else {
+                        System.out.println("No se genero el transaction ID");
+                    }
+                    return id.toString();
+
+                } catch (Exception e){
+                    System.out.println("Error al extraer el transaction_id: " + e.getMessage());
+                    return "Error: " + e.getMessage();
+                }
+
             }
             else {
                 StringBuilder responseError = new StringBuilder();
@@ -142,9 +166,9 @@ public class PostPaylink
                 connection.disconnect();
                 return responseError.toString();
             }
-
         }
     }
+
 
     //Funcion para solicitar el estado del PayLink
     public String getPaylink(String token, String apiURL) throws IOException{
