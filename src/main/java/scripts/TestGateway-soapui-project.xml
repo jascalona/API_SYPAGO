@@ -10083,7 +10083,140 @@ assert rejectedCode == "MD01"; // Aserción para el campo RejectedCode
          }
       ]
    }
-}</con:request><con:originalUri>https://10.0.62.20/api/v1/token/otp/generate</con:originalUri><con:assertion type="Invalid HTTP Status Codes" id="cb527bf3-dcbb-497d-b6fa-f3f45dc2ea66" name="Invalid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:credentials><con:username>sygateway_user</con:username><con:password>sB5I2lRO5Jxh1ia47S7KvnyLR</con:password><con:domain/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancaribe</con:value></con:property><con:property><con:name>id</con:name><con:value>J501617694  </con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01140560635600070438</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0114</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>C000021</con:value></con:property></con:properties></con:testSuite><con:testSuite id="92bfccd4-f388-4805-b1f7-8bfe23b02b9a" name="GW2 Bancrener"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="a47c30e1-3e74-4d65-84c4-c61d38cda0c0" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="b9080a9c-1300-4225-a124-17da7229137f"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/token/otp/generate</con:originalUri><con:assertion type="Invalid HTTP Status Codes" id="cb527bf3-dcbb-497d-b6fa-f3f45dc2ea66" name="Invalid HTTP Status Codes"><con:configuration><codes>200</codes></con:configuration></con:assertion><con:credentials><con:username>sygateway_user</con:username><con:password>sB5I2lRO5Jxh1ia47S7KvnyLR</con:password><con:domain/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="a4df78f2-68e1-4077-8428-d4fe0279811d" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Debito OTP" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="GV2-OPT-INT-0168" id="0fe1f730-f677-4a6f-b5b2-e08cee5d611e"><con:settings/><con:config service="http://10.0.62.20:8086" resourcePath="/api/v1/transaction" methodName="Method 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="GV2-OPT-INT-0168" id="735343a0-cb16-49ff-991d-662930c79ead" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://pruebas.app.sypago.net:9095/sygateway/bancrecer</con:endpoint><con:request>{
+   "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
+   "UserUniqueId":"5C8E0A4171FE",
+   "UserReferenceId":"18AAEFDEFAEF",
+   "UserGroupId":"E5709C7B2650",
+   "CreationDate":"2025-05-23T10:08:41.362508",
+   "TraceId":"5C8E0A4171FE",
+   "TransactionId":"${=Utiliti.LabelTransacionID.Transacion(7)}",
+   "SyPagoCreationChannel":"API",
+   "SyPagoAcceptanceChannel":"",
+   "SypagoInitDate":"2025-05-23T10:08:41.362508",
+   "SypagoProcessDate":"0001-01-01T00:00:00",
+   "Product":"050",
+   "SubProduct":"002",
+   "Amount":{
+      "Ccy":"VES",
+      "Amt":0.30,
+      "Commission":0
+   },
+   "ProductSypago":"DEBIT",
+   "SubProductSypago":"SYPAGO",
+   "ApprovalAgent":"OTHE",
+   "IssuingAgent":"0168",
+   "IssuingUser":{
+      "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
+      "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
+      "Account":{
+         "Tp":"CNTA",
+         "Id":"01140560635600070438"
+      },
+      "Document":{
+         "Nm":"Orlando Empresa",
+         "Id":"J501617694",
+         "SchmeNm":"SRIF"
+      },
+      "Concept":"CONCEPTO-18AAEFDEFAEF"
+   },
+   "ReceivingAgent":"0114",
+   "ReceivingUser":{
+      "UserId":"",
+      "LinkUserId":"",
+      "Account":{
+         "Tp":"CNTA",
+         "Id":"01050114870114143366"
+      },
+      "Document":{
+         "Nm":"Juridico",
+         "Id":"J400881730",
+         "SchmeNm":"SRIF"
+      },
+      "Concept":""
+   },
+   "PayKey":"27892664"
+}</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
+
+import net.sf.*
+import net.sf.json.*
+import net.sf.json.groovy.*
+
+import com.eviware.soapui.support.XmlHolder
+import net.sf.*
+import net.sf.json.*
+import net.sf.json.groovy.*
+import Utiliti.StatusReportCred;
+
+//sleep(2000)
+// Instancia de la clase Java GV2
+def Cliente = new GV2();
+
+//Llamar el valor de TransactioId
+    def requestContent = new String(messageExchange.rawRequestData)
+    def jsonStartIndex = requestContent.indexOf("{")
+    def jsonContent = requestContent.substring(jsonStartIndex)
+    //log.info  jsonContent  //Imprimir el msj de solicitud
+    def json = new groovy.json.JsonSlurper().parseText(jsonContent)
+
+// Definir el transaction_id que deseas consultar.
+// Este debe coincidir con el ID que esperas en la respuesta.
+def transactionIdToQuery = json.TransactionId; // Usamos el ID del paso de prueba
+
+
+//Obtener el codigo de estado
+def statusCode = messageExchange.responseStatusCode
+
+//Invocamos el nombre del paso de prueba
+String nameSteps = context.currentStep.name.toString();
+
+//Mensaje para averias de tipo, 409, 400, 401
+def msj = context.expand('${' + nameSteps + '#Response#$.detail}')
+
+switch (statusCode){
+	case 201:
+		def responseJsonString = Cliente.getStatusReports(
+		    "sygateway_user",
+		    "sB5I2lRO5Jxh1ia47S7KvnyLR",
+		    "https://pruebas.app.sypago.net:9095/sygateway/bancrecer/api/v1/transaction", // URL base
+		    transactionIdToQuery // El transaction_id se agrega como parámetro de la URL dentro del método Java
+		);
+
+		def response = new groovy.json.JsonSlurper().parseText(responseJsonString);	
+
+		def TxSt = response.Status
+
+			if(TxSt == "ACCP"){
+				log.info(TxSt)
+				assert TxSt == "ACCP";
+			}
+			else if(TxSt == "RJCT"){
+				
+				assert TxSt == "RJCT"
+				def Rns = response.RejectedCode
+				log.info (TxSt + "/" + Rns)
+				assert Rns == "TKCM"		
+			}
+			else{
+				log.info(TxSt)
+			}
+			
+		break;
+
+		case 400:
+	 	case 401:
+		case 409:
+		
+		log.info "StatusCode: " + statusCode + "/" + msj;
+		assert statusCode == statusCode;
+		break;
+
+	default:
+		log.info("Ha ocurrido un Error: " + statusCode)
+		break;
+	}
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties><con:property><con:name>Nm</con:name><con:value>Bancaribe</con:value></con:property><con:property><con:name>id</con:name><con:value>J501617694  </con:value></con:property><con:property><con:name>CNTA</con:name><con:value>01140560635600070438</con:value></con:property><con:property><con:name>codBanco</con:name><con:value>0114</con:value></con:property><con:property><con:name>CMCN</con:name><con:value>C000021</con:value></con:property></con:properties></con:testSuite><con:testSuite id="92bfccd4-f388-4805-b1f7-8bfe23b02b9a" name="GW2 Bancrener"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="a47c30e1-3e74-4d65-84c4-c61d38cda0c0" failOnError="false" failTestCaseOnErrors="false" keepSession="false" maxResults="0" name="Transaction-Sypago" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="groovy" name="Datos Bancaribe" id="b9080a9c-1300-4225-a124-17da7229137f"><con:settings/><con:config><script>//SCRIPTS PARA PASAR A CONTEXTO GLOBAL LA DATA IMPORTADA CARGADA DESDE EXCEL APLICANDO EL METODO RANDOM
 
 /*
 *  Para invocar a las variables desde el msj JSON de forma statica haciendo se debe hacer referencia al numero del elemento deseado

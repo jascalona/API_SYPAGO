@@ -16,7 +16,7 @@ public class PostPaylink
 {
     private String internal_id;
     private String group_id;
-    private final String API_URL_INIT = "https://pruebas.sypago.net:8086/api/v1/transaction/paylink";
+    private final String API_URL_INIT = "https://pruebas.sypago.net:8086/api/v1/transaction/checkout";
 
     public PostPaylink(String internal_id, String group_id){
         if (internal_id == null || internal_id.trim().isEmpty()){
@@ -116,7 +116,7 @@ public class PostPaylink
             os.flush();
 
             int responseCode = connection.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
+            //System.out.println("Response Code: " + responseCode);
 
             if (responseCode == 200){
                 StringBuilder response =new StringBuilder();
@@ -128,7 +128,7 @@ public class PostPaylink
                     }
                 }
                 connection.disconnect();
-                System.out.println(response);
+                //System.out.println(response);
                 StringBuilder id = new StringBuilder();
                 //Atajar el JSON
                 try {
@@ -169,6 +169,42 @@ public class PostPaylink
         }
     }
 
+    //Solicitud del SesionId
+    public String  obtain_sesionId(String token, String sesionURL) throws IOException {
+        URL url =new URL(sesionURL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(false);
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        int responseCode = connection.getResponseCode();
+
+        if (responseCode == 200){
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
+                String line;
+                while ((line = reader.readLine()) != null){
+                    response.append(line);
+                }
+            }
+            connection.disconnect();
+            return response.toString();
+        }
+        else{
+            StringBuilder responseError = new StringBuilder();
+
+            try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()))){
+                String line;
+                while ((line = errorReader.readLine()) != null){
+                    responseError.append(line);
+                }
+            }catch (Exception e){
+                return "Error: " + e.getMessage();
+            }
+            connection.disconnect();
+            return responseError.toString();
+        }
+
+    }
 
     //Funcion para solicitar el estado del PayLink
     public String getPaylink(String token, String apiURL) throws IOException{
@@ -178,16 +214,13 @@ public class PostPaylink
 
         connection.setRequestMethod("GET");
         connection.setDoOutput(false);
-
         connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setRequestProperty("Content-Type", "application/json");
-
         int responseCode = connection.getResponseCode();
-        System.out.println("Response Code: " + responseCode);
+        //System.out.println("Response Code: " + responseCode);
 
         if (responseCode == 200){
             StringBuffer response = new StringBuffer();
-
             try (BufferedReader reader =new BufferedReader(new InputStreamReader(connection.getInputStream()))){
                 String line;
                 while ((line = reader.readLine()) != null){
@@ -195,7 +228,27 @@ public class PostPaylink
                 }
             }
             connection.disconnect();
-            return response.toString();
+            //Atajamos el Status y transaction_id
+            StringBuilder transaccion =new StringBuilder();
+
+            try {
+                ObjectMapper mapper =new ObjectMapper();
+                JsonNode rootNode = mapper.readTree(response.toString());
+                JsonNode transactionId = rootNode.get("transaction_id");
+                JsonNode statusNode = rootNode.get("status");
+
+                if (transactionId != null || statusNode != null){
+                    transaccion.append(transactionId.asText() + " | " + statusNode.asText());
+                }
+                else {
+                    System.out.println("No se encontraron los nodos");
+                }
+            }catch (Exception e){
+                System.out.println("Error: " + e.getMessage());
+                return "Error de retorno: " + e.getMessage();
+            }
+
+            return transaccion.toString();
         }
         else {
             StringBuilder errorResponse = new StringBuilder();
