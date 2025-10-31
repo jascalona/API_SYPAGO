@@ -18,7 +18,7 @@ public class SetPalyink {
         int count = 3;
         for (int i=0; i < count; i++){
 
-        //Generar la transaccion y el SesionId
+            //Generar la transaccion y el SesionId
             String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
             System.out.println("Solicitando SesionId");
             System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
