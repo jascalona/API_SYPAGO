@@ -184,7 +184,7 @@ public class SignalRClient {
     }
 
     public static void main(String[] args) {
-        // Asumiendo que el sessionId ya fue obtenido a través de PostPaylink
+        // JEFE ESTOY CANSADO PERO RECUERDA MAñANA SETEAR EL SESIONID TRAIDO DEL NODO obtain_sesionId
         String mockSessionId = "d0d851a0-07ce-4075-a18c-74abda7e0b71";
 
         try {
