@@ -185,7 +185,7 @@ public class SignalRClient {
 
     public static void main(String[] args) {
         // Asumiendo que el sessionId ya fue obtenido a través de PostPaylink
-        String mockSessionId = "dd49ea01-c48d-49fc-a566-9469fb99ec91";
+        String mockSessionId = "d0d851a0-07ce-4075-a18c-74abda7e0b71";
 
         try {
             SignalRClient cliente = new SignalRClient(mockSessionId);
