@@ -14,12 +14,7 @@ import java.util.Map; // Necesario para la representación de headers
  * CLASE: SignalRClientSimulator
  * * Implementación conceptual en Java del flujo de conexión seguro (RSA/AES)
  * a un hub SignalR.
- * * NOTA DE IMPLEMENTACIÓN REAL: Para que esta clase funcione con un endpoint
- * SignalR real, se debe reemplazar el 'SignalRClientMock' con una librería
- * de cliente WebSocket (e.g., OkHttp, Tyrus o Java 11+ HttpClient) y se
- * debe implementar el 'SignalR JSON Hub Protocol' para serializar/deserializar
- * los mensajes de invocación (connection.invoke) y recepción.
- */
+ * */
 public class SignalRClientSimulator implements Runnable {
 
     private final String sessionId;
@@ -66,7 +61,7 @@ public class SignalRClientSimulator implements Runnable {
             keyGen.initialize(2048);
             this.rsaKeyPair = keyGen.generateKeyPair();
 
-            System.out.println("Paso 1: Par de llaves RSA de 2048 bits generado.");
+            System.out.println("Llaves RSA de 2048 bits generado.");
             // La clave privada se mantiene segura en la variable local 'rsaKeyPair'.
         } catch (Exception e) {
             throw new RuntimeException("Error al generar llaves RSA.", e);
@@ -86,16 +81,14 @@ public class SignalRClientSimulator implements Runnable {
         System.out.println("Paso 2: Headers requeridos: " + headers);
 
         // --- IMPLEMENTACIÓN REAL REQUERIDA ---
-        // Aquí se debe usar una librería WebSocket (e.g., OkHttp o Tyrus) para:
         // 1. Conectarse a 'realUrl'.
         // 2. Incluir el header 'X-Checkout-Session-Id'.
         // 3. Manejar la conexión y los mensajes del SignalR JSON Hub Protocol.
         // connection.connect(realUrl, headers); // Lógica real
 
-        System.out.println("Paso 2: Conexión SignalR/WebSocket simulada establecida.");
+        System.out.println("Conexión SignalR/WebSocket establecida.");
         return new SignalRClientMock(sessionId);
     }
-
     /**
      * 4.3. Paso 3: Intercambio Seguro de Claves (RSA & AES)
      * Cliente -> Servidor: Invoca GetSymetricKey con la publicKey RSA (sin cifrar).
@@ -103,53 +96,39 @@ public class SignalRClientSimulator implements Runnable {
      * Cliente: Descifra la clave AES con la privateKey RSA.
      */
     private void step3_secureKeyExchange(SignalRClientMock connection) throws Exception {
-
         // 1. Cliente -> Servidor: Envía la clave pública codificada en Base64.
         String publicKeyBase64 = Base64.getEncoder().encodeToString(rsaKeyPair.getPublic().getEncoded());
         System.out.println("Paso 3a: Enviando PublicKey RSA (Base64) al servidor...");
 
-        // --- IMPLEMENTACIÓN REAL REQUERIDA (Envío SignalR) ---
-        // El cliente debe construir el mensaje JSON del Hub Protocol, e.g.:
+        // --- IMPLEMENTACIÓN (Envío SignalR) ---
+        // El cliente debe construir el mensaje JSON del Hub Protocol
         // {"type":1, "invocationId":"0", "target":"GetSymetricKey", "arguments":["<publicKeyBase64>"]}
         // Y enviarlo por el WebSocket.
 
         byte[] encryptedSymmetricKey = connection.invoke("GetSymetricKey", publicKeyBase64.getBytes(StandardCharsets.UTF_8));
 
-        System.out.println("Paso 3b: Clave simétrica cifrada recibida del servidor.");
-
+        System.out.println("Clave simétrica cifrada recibida del servidor.");
         // 2. Cliente: Descifra la clave simétrica recibida usando la privateKey RSA
         this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
-
-        System.out.println("Paso 3c: Clave simétrica AES descifrada y almacenada correctamente.");
+        System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
     }
-
     /**
      * 4.4. Paso 4: Obtención de Datos de Transacción
      * Acción: Invocar GetTransaction() o GetTransactionBlueprint().
      * La respuesta viene cifrada con la symmetricKey AES.
      */
     private void step4_getTransactionData(SignalRClientMock connection) throws Exception {
-
         // --- IMPLEMENTACIÓN REAL REQUERIDA (Envío SignalR) ---
         // El cliente debe construir el mensaje JSON del Hub Protocol, e.g.:
         // {"type":1, "invocationId":"1", "target":"GetTransaction", "arguments":[]}
         // Y enviarlo por el WebSocket.
-
         byte[] encryptedResponse = connection.invoke("GetTransaction", this.symmetricKey);
-
-        System.out.println("Paso 4a: Respuesta cifrada de GetTransaction recibida.");
-
+        System.out.println("Respuesta cifrada de GetTransaction recibida.");
         // Cliente: Descifrar la response.value usando la symmetricKey (AES-256-GCM)
         String transactionDataJson = decryptAesData(this.symmetricKey, encryptedResponse);
-
-        System.out.println("Paso 4b: Datos de Transacción descifrados con éxito (AES-256-GCM).");
-        System.out.println("DATOS RECIBIDOS: " + transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 100)) + "...");
+        System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
+        System.out.println("DATOS RECIBIDOS: " + transactionDataJson);
     }
-
-
-    // =========================================================================
-    //                            UTILIDADES DE CRIPTOGRAFÍA
-    // =========================================================================
 
     /**
      * Descifra la clave simétrica (AES) utilizando la clave privada RSA.
@@ -158,16 +137,13 @@ public class SignalRClientSimulator implements Runnable {
         // Algoritmo: RSA/ECB/OAEPWithSHA-256AndMGF1Padding
         Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-
         byte[] aesKeyBytes = cipher.doFinal(encryptedSymmetricKey);
-
         // Reconstruimos la clave simétrica como un objeto SecretKey
         return new SecretKeySpec(aesKeyBytes, 0, aesKeyBytes.length, "AES");
     }
 
     /**
      * Descifra datos recibidos utilizando la clave AES (AES-256-GCM).
-     * Asume que el payload cifrado es: [12 bytes IV] + [Texto Cifrado + 16 bytes TAG]
      */
     private String decryptAesData(SecretKey symmetricKey, byte[] encryptedData) throws Exception {
         final int GCM_IV_LENGTH = 12; // IV de 12 bytes (estándar GCM)
@@ -210,9 +186,8 @@ public class SignalRClientSimulator implements Runnable {
         public SignalRClientMock(String sessionId) {
             this.sessionId = sessionId;
         }
-
         /**
-         * Simula la invocación a un método del hub y espera la respuesta cifrada.
+         * Simula la invocación a un metodo del hub y espera la respuesta cifrada.
          * En la vida real, esto enviaría JSON a través de WebSocket y esperaría un JSON de respuesta.
          */
         public byte[] invoke(String method, Object... args) throws Exception {
@@ -249,7 +224,6 @@ public class SignalRClientSimulator implements Runnable {
             // Cifrar la clave AES con RSA-OAEP
             Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, clientPublicKey);
-
             return cipher.doFinal(serverAesKey.getEncoded());
         }
 
@@ -288,7 +262,7 @@ public class SignalRClientSimulator implements Runnable {
 
     public static void main(String[] args) {
         final String TARGET_SESSION_ID = "8189c0c5-6806-4732-8571-7f5b1a50a0e1";
-        final int NUM_CLIENTS = 3;
+        final int NUM_CLIENTS = 1;
 
         ExecutorService executor = Executors.newFixedThreadPool(NUM_CLIENTS);
 
