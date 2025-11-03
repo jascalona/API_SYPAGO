@@ -193,8 +193,6 @@ public class PostPaylink
             ObjectMapper mapper =new ObjectMapper();
 
             try {
-
-
                 JsonNode rootNode = mapper.readTree(jsonString);
                 JsonNode session_id = rootNode.get("session_id");
                 if (session_id != null){

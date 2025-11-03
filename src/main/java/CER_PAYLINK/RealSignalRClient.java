@@ -1,5 +1,8 @@
 package CER_PAYLINK;
 
+import Utiliti.LabelTransacionID;
+
+import java.io.IOException;
 import java.security.*;
 import java.security.spec.*;
 import javax.crypto.*;
@@ -61,6 +64,7 @@ public class RealSignalRClient implements Runnable {
 
         } catch (Exception e) {
             System.err.println("Error FATAL en cliente " + sessionId + ": " + e.getMessage());
+            // El printStackTrace es clave para ver la causa real, especialmente si es ExecutionException
             e.printStackTrace();
         } finally {
             if (wsClient != null) {
@@ -112,9 +116,10 @@ public class RealSignalRClient implements Runnable {
         client.connect(wssUrl);
 
         if (client.isHandshakeComplete()) {
-            System.out.println("✅ Conexión SignalR pura establecida y Handshake completado.");
+            System.out.println("Conexión SignalR pura establecida y Handshake completado.");
             return client;
         } else {
+            // Esta línea ya no debería ser alcanzable si connect lanza la excepción correctamente
             throw new RuntimeException("Fallo en la conexión WSS o Handshake.");
         }
     }
@@ -126,19 +131,21 @@ public class RealSignalRClient implements Runnable {
         System.out.println("Enviando PublicKey RSA (PEM) al servidor...");
 
         // 1. Invocar GetSymetricKey
+        // El invoke se encarga de manejar el Base64 de la respuesta
         byte[] encryptedSymmetricKey = wsClient.invoke("GetSymetricKey", publicKeyPem);
 
         System.out.println("Clave simétrica cifrada recibida del servidor.");
 
         // 2. Descifrar la clave simétrica con la llave privada RSA-OAEP
         this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
-        System.out.println("✅ Clave simétrica AES descifrada y almacenada correctamente.");
+        System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
     }
 
     private void step4_getTransactionData() throws Exception {
         System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Paso 4: Obtención de Datos ---");
 
         // 1. Invocar GetTransaction()
+        // El invoke se encarga de manejar el Base64 de la respuesta
         byte[] encryptedResponse = wsClient.invoke("GetTransaction");
 
         System.out.println("Respuesta cifrada de GetTransaction recibida. Tamaño: " + encryptedResponse.length);
@@ -146,7 +153,7 @@ public class RealSignalRClient implements Runnable {
         // 2. Descifrar con la clave simétrica local (AES-256-GCM)
         String transactionDataJson = decryptAesData(this.symmetricKey, encryptedResponse);
 
-        System.out.println("✅ Datos de Transacción descifrados con éxito (AES-256-GCM).");
+        System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
         System.out.println(" CLIENTE: " + sessionId.substring(0, 8));
         System.out.println("            RESPONSE.VALUE DECODIFICADO");
@@ -200,19 +207,34 @@ public class RealSignalRClient implements Runnable {
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         System.out.println("Iniciando cliente REAL con WebSocket Puro al /CheckoutHub.");
 
-        // ** REEMPLAZA CON TU SESION ID ACTIVA **
-        String clientSessionId = "902ca2f2-cd3f-43c0-ac0e-97a9e6d09c8f";
-        Runnable clientTask = new RealSignalRClient(clientSessionId);
+        // ** ASUMIENDO QUE ESTE CODIGO ES CORRECTO Y ESTÁ FUNCIONANDO **
+        String internal_id = LabelTransacionID.UIDD(12);
+        String group_id = LabelTransacionID.UIDD(12);
+
+        String token = AutenticationToken.mapperToken();
+        PostPaylink datosConstructor = new PostPaylink(internal_id, group_id);
+        String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
+
+        // Obtención del sessionId
+        String activeSessionId = "a713dda2-1a19-45bd-aac1-1436dfed5af8";
+
+        // Verificación de que el sessionId no esté vacío antes de continuar
+        if (activeSessionId == null || activeSessionId.isEmpty()) {
+            System.err.println("Error: El SessionId obtenido es nulo o vacío. No se puede iniciar el cliente SignalR.");
+            return;
+        }
+
+        Runnable clientTask = new RealSignalRClient(activeSessionId);
         executor.execute(clientTask);
 
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(35, TimeUnit.SECONDS)) {
+            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) { // Se aumentó el timeout del Executor por seguridad
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -223,7 +245,7 @@ public class RealSignalRClient implements Runnable {
 
 
     // =========================================================================
-    //                   CLASE INTERNA: RealWebSocketClient
+    //                   CLASE INTERNA: RealWebSocketClient (CON AJUSTES)
     // =========================================================================
 
     private abstract static class SignalRConnection {
@@ -248,17 +270,38 @@ public class RealSignalRClient implements Runnable {
 
         public RealWebSocketClient(String sessionId) { super(sessionId); }
 
+        /**
+         * Establece la conexión WSS y espera la confirmación del Handshake.
+         * Se agregó manejo explícito de TimeoutException, ExecutionException e InterruptedException.
+         */
         public void connect(String wssUrl) throws Exception {
             HttpClient httpClient = HttpClient.newHttpClient();
 
+            System.out.println("  [DEBUG] Session ID usado en Header/Query: " + sessionId);
             webSocket = httpClient.newWebSocketBuilder()
-                    .header("X-Checkout-Session-Id", sessionId)
-                    .buildAsync(URI.create(wssUrl), this)
+                    .header("X-Checkout-Session-Id", sessionId) // Se usa el mismo
+                    .buildAsync(URI.create(wssUrl), this) // URL ya contiene ?sessionId=...
                     .join();
 
-            // ESPERA AUMENTADA A 30 SEGUNDOS para Handshake
-            handshakeFuture.get(30, TimeUnit.SECONDS);
-            this.handshakeComplete = true;
+            // AJUSTE 1: Manejo robusto de excepciones y logging para el Handshake
+            try {
+                System.out.println(" [WSS Event] Esperando la confirmación del Handshake (Máx. 50s)...");
+                // LÍNEA CRÍTICA (antes 271): Espera con timeout
+                handshakeFuture.get(50, TimeUnit.SECONDS);
+                this.handshakeComplete = true;
+            } catch (TimeoutException e) {
+                // Si la espera expira (lo que lleva a InterruptedException si se omite)
+                System.err.println("❌ Handshake Fallido: Timeout de 50s al esperar la respuesta del servidor.");
+                throw new RuntimeException("Timeout de 50s al esperar la confirmación del Handshake de SignalR.", e);
+            } catch (ExecutionException e) {
+                // Si la conexión falló (ej. onError fue llamado o una excepción en onText/onClose)
+                System.err.println("❌ Handshake Fallido: Excepción de Ejecución. Causa: " + e.getCause().getMessage());
+                throw new RuntimeException("Error durante la conexión WSS o Handshake. (Causa: " + e.getCause().getMessage() + ")", e);
+            } catch (InterruptedException e) {
+                // Si el thread se interrumpe
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Conexión interrumpida durante el Handshake.", e);
+            }
         }
 
         public boolean isHandshakeComplete() { return handshakeComplete; }
@@ -281,6 +324,8 @@ public class RealSignalRClient implements Runnable {
 
             String jsonArgs = "[]";
             if (args.length > 0) {
+                // Se asume que solo se pasa un argumento (publicKeyPem) que debe ir entre comillas
+                // Si se invocara GetTransaction(), args sería vacío y jsonArgs sería "[]"
                 jsonArgs = String.format("[\"%s\"]", args[0]);
             }
 
@@ -302,18 +347,11 @@ public class RealSignalRClient implements Runnable {
 
         @Override
         public void onOpen(WebSocket webSocket) {
-            System.out.println("  [WSS Event] Conexión WebSocket abierta. Esperando 500ms antes del Handshake...");
-
-            // ANADIR UN PEQUEÑO RETRASO DE 500ms
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            System.out.println(" [WSS Event] Conexión WebSocket abierta. Iniciando Handshake...");
 
             String handshakeMessage = "{\"protocol\":\"json\",\"version\":1}\u001e";
             webSocket.sendText(handshakeMessage, true);
-            System.out.println("  [WSS Send] Enviando Handshake de SignalR.");
+            System.out.println("  [WSS Send] Enviando Handshake de SignalR. Payload: " + handshakeMessage.trim().replace("\u001e", ""));
         }
 
         @Override
@@ -324,7 +362,7 @@ public class RealSignalRClient implements Runnable {
             // 1. Manejar la confirmación del Handshake (respuesta {})
             if (message.equals("{}")) {
                 if (!handshakeComplete && !handshakeFuture.isDone()) {
-                    System.out.println("  [WSS Receive] Handshake de SignalR confirmado.");
+                    System.out.println("  [WSS Receive] ✅ Handshake de SignalR confirmado exitosamente.");
                     handshakeFuture.complete(null);
                 }
             }
@@ -354,8 +392,8 @@ public class RealSignalRClient implements Runnable {
                         }
                     }
                 } else {
-                    // Ignorar otros mensajes
-                    System.out.println("  [WSS Receive] Mensaje no procesado: " + message.substring(0, Math.min(message.length(), 80)) + "...");
+                    // AJUSTE 2: Log de mensajes no procesados (incluye notificaciones type 1/2)
+                    System.out.println("  [WSS Receive] ⚠️ Mensaje NO procesado (Puede ser NOTIFICACIÓN o ERROR): " + message.substring(0, Math.min(message.length(), 100)) + "...");
                 }
             }
             return null;
@@ -363,16 +401,19 @@ public class RealSignalRClient implements Runnable {
 
         @Override
         public void onError(WebSocket webSocket, Throwable error) {
-            System.err.println("  [WSS Event] Error en la conexión: " + error.getMessage());
+            // AJUSTE 3: Impresión del stack trace y finalización excepcional
+            System.err.println("  [WSS Event] ❌ Error en la conexión: " + error.getMessage());
+            error.printStackTrace();
             handshakeFuture.completeExceptionally(error);
             pendingInvocations.values().forEach(f -> f.completeExceptionally(error));
         }
 
         @Override
         public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-            System.out.println("  [WSS Event] Conexión cerrada. Código: " + statusCode + ", Razón: " + reason);
+            System.out.println("  [WSS Event] 🛑 Conexión cerrada. Código: " + statusCode + ", Razón: " + reason);
             if (!handshakeFuture.isDone()) {
-                handshakeFuture.completeExceptionally(new RuntimeException("Conexión cerrada antes del Handshake."));
+                // Propaga la excepción si se cierra antes de completar el Handshake
+                handshakeFuture.completeExceptionally(new RuntimeException("Conexión cerrada antes del Handshake (Code: " + statusCode + "). Razón: " + reason));
             }
             if (!pendingInvocations.isEmpty()) {
                 pendingInvocations.values().forEach(f -> f.completeExceptionally(new RuntimeException("Conexión cerrada. Fallo al obtener respuesta.")));
