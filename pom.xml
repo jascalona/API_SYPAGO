@@ -21,12 +21,17 @@
             <version>2.16.1</version>
         </dependency>
 
-        <!-- Agregue esta dependencia a su pom.xml -->
         <dependency>
             <groupId>com.microsoft.signalr</groupId>
             <artifactId>signalr</artifactId>
-            <version>6.0.2</version> <!-- Usar una versión reciente -->
+            <version>5.0.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+
     </dependencies>
 
 </project>

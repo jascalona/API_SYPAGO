@@ -15,7 +15,7 @@ public class SetPalyink {
         PostPaylink datosConstructor = new PostPaylink(internal_id, group_id);
 
         //Generar la Iniciacion y solicitud de la transaccion
-        int count = 3;
+        int count = 1;
         for (int i=0; i < count; i++){
 
             //Generar la transaccion y el SesionId

@@ -1,6 +1,7 @@
 package CER_PAYLINK;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.w3c.dom.Node;
 
 import javax.xml.crypto.Data;
 import javax.xml.transform.sax.SAXSource;
@@ -49,8 +50,8 @@ public class PostPaylink
         //Cuerpo de solicitud
         try(DataOutputStream os = new DataOutputStream(connection.getOutputStream())){
             //Datos
-           // String internal_id = this.internal_id;
-           // System.out.println("Desde el METODO:" + internal_id);
+            // String internal_id = this.internal_id;
+            // System.out.println("Desde el METODO:" + internal_id);
             String group_id = this.group_id;
             String bank_code = "0001";
             String type = "CNTA";
@@ -187,7 +188,27 @@ public class PostPaylink
                 }
             }
             connection.disconnect();
-            return response.toString();
+
+            String jsonString = response.toString();
+            ObjectMapper mapper =new ObjectMapper();
+
+            try {
+
+
+                JsonNode rootNode = mapper.readTree(jsonString);
+                JsonNode session_id = rootNode.get("session_id");
+                if (session_id != null){
+                    String id = session_id.asText();
+                }
+                else {
+                    System.out.println("El session_id no pudo ser generado!");
+                }
+                return session_id.asText();
+            }
+            catch (Exception e){
+                System.out.println("Error: " + e.getMessage());
+                return e.getMessage();
+            }
         }
         else{
             StringBuilder responseError = new StringBuilder();
@@ -230,7 +251,6 @@ public class PostPaylink
             connection.disconnect();
             //Atajamos el Status y transaction_id
             StringBuilder transaccion =new StringBuilder();
-
             try {
                 ObjectMapper mapper =new ObjectMapper();
                 JsonNode rootNode = mapper.readTree(response.toString());
@@ -247,7 +267,6 @@ public class PostPaylink
                 System.out.println("Error: " + e.getMessage());
                 return "Error de retorno: " + e.getMessage();
             }
-
             return transaccion.toString();
         }
         else {
