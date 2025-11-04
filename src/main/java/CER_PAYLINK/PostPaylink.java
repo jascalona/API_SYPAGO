@@ -62,7 +62,7 @@ public class PostPaylink
             int min_allow_amt = 1;
             int max_allow_amt= 1;
             boolean use_day_rate = false;
-            String concept = "Cobro de impuestos";
+            String concept = "Cobro de Servicios";
             String sucessful_callback_url = "https://www.sypago.com/success";
             String failed_callback_url = "https://www.sypago.com/fail";
             String return_front_end_url = "https://www.sypago.com/return";
@@ -109,8 +109,8 @@ public class PostPaylink
                     + "\"type\":\"" + typeR + "\","
                     + "\"number\":\"" + numberCELE + "\""
                     + "}"
-                    + "},"
-                    + "\"expiration\":" + expiration
+                    + "}"
+                    //+ "\"expiration\":" + expiration
                     + "}";
 
             os.writeBytes(jsonInputString);

@@ -20,12 +20,11 @@ public class SetPalyink {
 
             //Generar la transaccion y el SesionId
             String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
-            System.out.println("Solicitando SesionId");
-            System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
+            //  System.out.println("Solicitando SesionId");
+        //    System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
 
 
 
-            /*  SOLICITUD DE ESTADO
             String requestURL = "https://pruebas.sypago.net:8086/api/v1/transaction/" + datosConstructor.postPaylink(token);;
             try {
                 System.out.println("Solicitando el estado de la transaccion");
@@ -35,7 +34,7 @@ public class SetPalyink {
                 System.out.println("Se ha producido un error I/O: " + e.getMessage());
                 e.printStackTrace();
             }
-             */
+
         }
     }
 }

@@ -44,7 +44,7 @@ public class RealSignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
     @Override
     public void run() {
-        System.out.println("--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
+        System.out.println("\n--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
         try {
             step1_generateRsaKeys(); //generacion de llaves
             step2_establishConnection(); //establecer la conexion
@@ -54,12 +54,15 @@ public class RealSignalRClient implements Runnable {
             System.err.println("Error FATAL en cliente " + sessionId + ": " + e.getMessage());
             e.printStackTrace();
         } finally {
+            /*
             if (hubConnection != null) {
                 System.out.println("Cerrando la conexión SignalR...");
                 // Esperar un poco para el cierre limpio de la conexión
-                hubConnection.stop().blockingAwait(5, TimeUnit.SECONDS);
+                hubConnection.stop().blockingAwait(60, TimeUnit.SECONDS);
             }
-            System.out.println("--- Cliente REAL Finalizado para Sesión: " + sessionId + " ---");
+             */
+            System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
+            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
     // --------------------------------------------------------------------------------------------------
@@ -111,7 +114,7 @@ public class RealSignalRClient implements Runnable {
 
         try {
             // Aumento del timeout a 50 segundos para el inicio
-            hubConnection.start().blockingAwait(50, TimeUnit.SECONDS);
+            hubConnection.start().blockingAwait(5, TimeUnit.SECONDS);
             System.out.println("Conexión SignalR y Handshake completados exitosamente.");
         } catch (Exception e) {
             throw new RuntimeException("Fallo al establecer la conexión SignalR (Timeout/Error de conexión).", e);
@@ -227,7 +230,6 @@ public class RealSignalRClient implements Runnable {
         if (combinedEncryptedData.length < GCM_IV_LENGTH + GCM_TAG_LENGTH) {
             throw new GeneralSecurityException("Datos cifrados incompletos o faltan IV/Tag.");
         }
-
         // El formato AES-GCM esperado es: [IV (12 bytes)] + [Ciphertext + Auth Tag (16 bytes)]
         byte[] iv = new byte[GCM_IV_LENGTH];
         System.arraycopy(combinedEncryptedData, 0, iv, 0, GCM_IV_LENGTH);
@@ -253,30 +255,30 @@ public class RealSignalRClient implements Runnable {
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        System.out.println("Iniciando cliente REAL con SignalR Oficial al /CheckoutHub.");
+        System.out.println("Iniciando cliente virtual con SignalR al /CheckoutHub.");
 
-        // ASUMIENDO que el código para generar IDs, obtener el token y llamar a PostPaylink es correcto
+        int n_transacction = 100;
+        for(int i=0; i < n_transacction; i++ ){
+
         String internal_id = LabelTransacionID.UIDD(12);
         String group_id = LabelTransacionID.UIDD(12);
 
-        // Token de ejemplo. Se asume que es válido.
-        String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6ImJlYXJlciIsImtpZCI6ImZleFByX0dJaEhnTmM5VzVxTlN3YUhBcFEwMXRqeUlqbWtpY0d5V1hHUjFzIn0.eyJleHAiOjE3NjIyOTU0NTgsImlhdCI6MTc2MjI1OTQ1OCwianRpIjoiYTNkMzkzYzItZDgyMS00NzY1LTkxMWQtMmMwOWJkNTFmNDczIiwiaXNzIjoiaHR0cHM6Ly9wcnVlYmFzLnN5cGFnby5uZXQ6ODA4MS9yZWFsbXMvc3lwYWdvIiwic3ViIjoiNTNkNzQ3ZTItMWJhMS00N2I0LThmYTYtYjMzOTU1YWQyN2I3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiam9zZSIsInNjb3BlIjoic3lwYWdvX2FwaV9rZXlfc2NvcGU6NTVhNGVjMzktNDI0Zi00NDIzLWI5MTgtYjgxMWZkMDQ3OTk2LlVzZXIiLCJjbGllbnRIb3N0IjoiMTcyLjIwLjAuMSIsImNsaWVudEFkZHJlc3MiOiIxNzIuMjAuMC4xIiwiY2xpZW50X2lkIjoiam9zZSJ9.Qo2HgTxdhlbOVW3bC01Mve4-vu_2iugSejOTWS6B5YeCJuGOcX1H-1IbbLdoBimPppYv20CgOzq9YnrKXuzCH0itt_bRYDdTxdW4f-1_AMPNVXYeEPxL-OwljxrXNz9FzN0_xSQ";
-        PostPaylink datosConstructor = new PostPaylink(internal_id, group_id);
+        String token = AutenticationToken.mapperToken();
+        PostPaylink generate_transacction = new PostPaylink(internal_id, group_id);
 
-        // Se asume que postPaylink devuelve el ID de la transacción
-        String transactionId = datosConstructor.postPaylink(token);
-        String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id=" + transactionId + "&blueprint=false";
+            String url_sessionId =  "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="
+                    + generate_transacction.postPaylink(token)+"&=blueprint=false";
 
-        // Obtención del sessionId
-        String activeSessionId = "29bbfe72-37d6-43f9-b924-58003fad479e";
+            String session_id = generate_transacction.obtain_sesionId(token, url_sessionId);
 
-        if (activeSessionId == null || activeSessionId.isEmpty()) {
-            System.err.println("Error: El SessionId obtenido es nulo o vacío. No se puede iniciar el cliente SignalR.");
-            return;
+            if (session_id == null || session_id.isEmpty()) {
+                System.err.println("Error: El SessionId obtenido es nulo o vacío. No se puede iniciar el cliente SignalR.");
+                return;
+            }
+
+            Runnable clientTask = new RealSignalRClient(session_id);
+            executor.execute(clientTask);
         }
-
-        Runnable clientTask = new RealSignalRClient(activeSessionId);
-        executor.execute(clientTask);
 
         executor.shutdown();
         try {
