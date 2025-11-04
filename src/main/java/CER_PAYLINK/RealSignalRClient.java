@@ -216,12 +216,12 @@ public class RealSignalRClient implements Runnable {
         String internal_id = LabelTransacionID.UIDD(12);
         String group_id = LabelTransacionID.UIDD(12);
 
-        String token = AutenticationToken.mapperToken();
+        String token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmZXpQcl9HSWhIZ05jOVc1cU5Td2FIQXBRMVRqeUlqbWtpY0d5V1hHUjFzIn0.eyJleHAiOjE3NjIyOTU0NTgsImlhdCI6MTc2MjI1OTQ1OCwianRpIjoiYTNkYzg4OGEtMDliNi00NzNiLWE3YjgtZjE3YTI1MTQyYzNlIiwiaXNzIjoiaHR0cHM6Ly9wcnVlYmFzLnN5cGFnby5uZXQ6ODA4MS9yZWFsbXMvc3lwYWdvIiwic3ViIjoiNTNkNzQ3ZTItMWJhMS00N2I0LThmYTYtYjMzOTU1YWQyN2I3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiam9zZSIsInNjb3BlIjoic3lwYWdvX2FwaV9rZXlfc2NvcGU6NTVhNGVjMzktNDI0Zi00NDIzLWI5MTgtYjgxMWZkMDQ3OTk2LlVzZXIiLCJjbGllbnRIb3N0IjoiMTcyLjIwLjAuMSIsImNsaWVudEFkZHJlc3MiOiIxNzIuMjAuMC4xIiwiY2xpZW50X2lkIjoiam9zZSJ9.Qo2HgTxdhlbOVW3bC01Mve4-vu_2iugSejOTWS6Bv5YeCJuGOcX1H-1IbbLdoBimPppYv20CgOzq9YnrKXuzCH0itt_bRYDdTxdW4f-1_AMPNVvYeEPxL-OwljxrXNz9FzZtYnls3vEIHRybDYkmolDEPCNq4-0n6K8h00CB12emeSh_lB_YrqeuWiNwJXmn_gnSswyvLJVTE28e8LGH467bEgVC5HjyAIEA2jyY0V13PyNTkyQ1LVGtPQBqhtCTVVYhQ4W0LJ5EHCG_VnF-vLuBHBdiddPBj_Lop0hjfa-V2dR_Zxl4bLNXp08C2mQHEAAdLV9s9bU1TCerqo_xSQ";
         PostPaylink datosConstructor = new PostPaylink(internal_id, group_id);
         String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
 
         // Obtención del sessionId
-        String activeSessionId = "a713dda2-1a19-45bd-aac1-1436dfed5af8";
+        String activeSessionId = datosConstructor.obtain_sesionId(token, sesionURL);
 
         // Verificación de que el sessionId no esté vacío antes de continuar
         if (activeSessionId == null || activeSessionId.isEmpty()) {
@@ -291,11 +291,11 @@ public class RealSignalRClient implements Runnable {
                 this.handshakeComplete = true;
             } catch (TimeoutException e) {
                 // Si la espera expira (lo que lleva a InterruptedException si se omite)
-                System.err.println("❌ Handshake Fallido: Timeout de 50s al esperar la respuesta del servidor.");
+                System.err.println("Handshake Fallido: Timeout de 50s al esperar la respuesta del servidor.");
                 throw new RuntimeException("Timeout de 50s al esperar la confirmación del Handshake de SignalR.", e);
             } catch (ExecutionException e) {
                 // Si la conexión falló (ej. onError fue llamado o una excepción en onText/onClose)
-                System.err.println("❌ Handshake Fallido: Excepción de Ejecución. Causa: " + e.getCause().getMessage());
+                System.err.println("Handshake Fallido: Excepción de Ejecución. Causa: " + e.getCause().getMessage());
                 throw new RuntimeException("Error durante la conexión WSS o Handshake. (Causa: " + e.getCause().getMessage() + ")", e);
             } catch (InterruptedException e) {
                 // Si el thread se interrumpe
@@ -402,7 +402,7 @@ public class RealSignalRClient implements Runnable {
         @Override
         public void onError(WebSocket webSocket, Throwable error) {
             // AJUSTE 3: Impresión del stack trace y finalización excepcional
-            System.err.println("  [WSS Event] ❌ Error en la conexión: " + error.getMessage());
+            System.err.println("  [WSS Event] Error en la conexión: " + error.getMessage());
             error.printStackTrace();
             handshakeFuture.completeExceptionally(error);
             pendingInvocations.values().forEach(f -> f.completeExceptionally(error));
@@ -410,7 +410,7 @@ public class RealSignalRClient implements Runnable {
 
         @Override
         public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-            System.out.println("  [WSS Event] 🛑 Conexión cerrada. Código: " + statusCode + ", Razón: " + reason);
+            System.out.println("  [WSS Event] Conexión cerrada. Código: " + statusCode + ", Razón: " + reason);
             if (!handshakeFuture.isDone()) {
                 // Propaga la excepción si se cierra antes de completar el Handshake
                 handshakeFuture.completeExceptionally(new RuntimeException("Conexión cerrada antes del Handshake (Code: " + statusCode + "). Razón: " + reason));
