@@ -15,6 +15,11 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import java.util.concurrent.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 //Proveedor de criptografía
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -62,7 +67,6 @@ public class RealSignalRClient implements Runnable {
             }
              */
            // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
-            System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
     // --------------------------------------------------------------------------------------------------
@@ -102,7 +106,7 @@ public class RealSignalRClient implements Runnable {
     private void step2_establishConnection() throws Exception {
         String fullUrl = HUB_URL_BASE + "?sessionId=" + sessionId;
 
-        System.out.println("\n---Iniciando Conexión SignalR para el Cliente " + sessionId.substring(0, 8) + "---");
+        //System.out.println("\n---Iniciando Conexión SignalR para el Cliente " + sessionId.substring(0, 8) + "---");
         //System.out.println("URL Hub Completa: " + fullUrl);
 
         this.hubConnection = HubConnectionBuilder.create(fullUrl)
@@ -160,7 +164,7 @@ public class RealSignalRClient implements Runnable {
         if (this.symmetricKey == null) {
             throw new IllegalStateException("La clave simétrica no se pudo descifrar en el paso anterior.");
         }
-        System.out.println("\n--- Obtención de Datos para el Cliente " + sessionId.substring(0, 8) + " ---");
+        //System.out.println("\n--- Obtención de Datos para el Cliente " + sessionId.substring(0, 8) + " ---");
         // Invocar GetTransaction. El servidor devuelve un objeto que contiene el campo "value".
         Object serverResponseObject = hubConnection.invoke(Object.class, "GetTransaction")
                 .blockingGet();
@@ -195,10 +199,7 @@ public class RealSignalRClient implements Runnable {
 
         //System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
-        System.out.println(" CLIENTE: " + sessionId);
-        System.out.println("            RESPONSE.VALUE DECODIFICADO");
-        System.out.println("=======================================================");
-        System.out.println(transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
+        System.out.println(" CLIENTE: " + sessionId + "\n"+transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
                 (transactionDataJson));
         System.out.println("=======================================================\n");
     }
@@ -252,39 +253,45 @@ public class RealSignalRClient implements Runnable {
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
 
+    private static final int THREAD_POOL_SIZE = 15;
+    private static final int NUMBER_OF_TRANSACTIONS = 15;
+    private static final long TIMEOUT_SECONDS = 120;
+
     public static void main(String[] args) throws IOException {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        System.out.println("Iniciando cliente virtual con SignalR al /CheckoutHub.");
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        List<Future<String>> futures = new ArrayList<>();
 
-        int n_transacction = 2;
-        for(int i=0; i < n_transacction; i++ ){
-            String internal_id = LabelTransacionID.UIDD(12);
-            String group_id = LabelTransacionID.UIDD(12);
+        System.out.println("Configuración: " + THREAD_POOL_SIZE + " TPS para " + NUMBER_OF_TRANSACTIONS + " transacciones.");
+        System.out.println("---------------------------------------------------------------------");
 
-            String token = AutenticationToken.mapperToken();
-            PostPaylink generate_transacction = new PostPaylink(internal_id, group_id);
-            String url_sessionId = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+generate_transacction.postPaylink(token)+"&blueprint=false";
-
-            String session_id = generate_transacction.obtain_sesionId(token, url_sessionId);
-
-            if (session_id == null || session_id.isEmpty()) {
-                System.err.println("Error: El SessionId obtenido es nulo o vacío. No se puede iniciar el cliente SignalR.");
-                return;
-            }
-
-            Runnable clientTask = new RealSignalRClient(session_id);
-            executor.execute(clientTask);
+        for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++) {
+            Callable<String> task = new TransactionTask(i);
+            futures.add(executor.submit(task));
         }
 
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(90, TimeUnit.SECONDS)) {
+            if (!executor.awaitTermination(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                System.out.println("\nLas tareas no terminaron a tiempo (Timeout), forzando apagado.");
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
+            System.err.println("\nEspera interrumpida.");
             executor.shutdownNow();
             Thread.currentThread().interrupt();
         }
+
+        // --- Centralización de la Salida ---
+        System.out.println("\n--- Resultados de las TPS ---");
+
+        for (Future<String> future : futures) {
+            try {
+                System.out.println(future.get());
+            } catch (Exception e) {
+                System.err.println("[FALLO FATAL] Excepción al obtener resultado: " + e.getMessage());
+            }
+        }
+        System.out.println("---------------------------------------------------------------------");
     }
 }
