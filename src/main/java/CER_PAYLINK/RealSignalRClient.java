@@ -1,166 +1,202 @@
 package CER_PAYLINK;
-
 import Utiliti.LabelTransacionID;
+import com.microsoft.signalr.HubConnection;
+import com.microsoft.signalr.HubConnectionBuilder;
+import com.microsoft.signalr.TransportEnum;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.security.*;
-import java.security.spec.*;
-import javax.crypto.*;
-import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.concurrent.*;
 import java.nio.charset.StandardCharsets;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.WebSocket;
-import java.util.concurrent.CompletionStage;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-/**
- * CLASE: RealSignalRClient
- * Implementación basada en WebSocket puro (java.net.http) para la conexión con skipNegotiation: true
- * al Hub: /CheckoutHub.
- * Flujo: Conexión -> Handshake (RSA-OAEP) -> GetTransaction (AES-GCM)
- */
+import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+//Proveedor de criptografía
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 public class RealSignalRClient implements Runnable {
+    private static final String HUB_URL_BASE = "https://pruebas.app.sypago.net:8086/CheckoutHub";
+    // Algoritmo de descifrado (Confirmado como el correcto: RSA OAEP con SHA-256)
+    private static final String ALGORITHM_RSA = "RSA/NONE/OAEPWithSHA256AndMGF1Padding";
 
-    // URL y Configuración CRÍTICA
-    private static final String WSS_URL_BASE = "wss://pruebas.app.sypago.net:8086/CheckoutHub";
-    private static final String ALGORITHM_RSA_OAEP = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+    // Objeto GSON para extraer el campo "value" del objeto de respuesta de SignalR
+    private static final Gson GSON = new Gson();
 
     private final String sessionId;
     private KeyPair rsaKeyPair;
     private SecretKey symmetricKey;
-    private RealWebSocketClient wsClient;
+    private HubConnection hubConnection;
 
     public RealSignalRClient(String sessionId) {
         this.sessionId = sessionId;
+        // Registrar el proveedor Bouncy Castle
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+            System.out.println("Proveedor Bouncy Castle registrado.");
+        }
     }
-
     // --------------------------------------------------------------------------------------------------
     //                                  FLUJO PRINCIPAL
     // --------------------------------------------------------------------------------------------------
-
     @Override
     public void run() {
-        System.out.println("--- Cliente REAL Iniciado para Sesión: " + sessionId + " ---");
+        System.out.println("--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
         try {
-            // 4.1. Paso 1: Generación de Llaves Criptográficas (RSA-OAEP 2048)
-            step1_generateRsaKeys();
-
-            // 4.2. Paso 2: Establecimiento de Conexión WebSocket (Pura a /CheckoutHub)
-            wsClient = step2_establishConnection();
-
-            // 4.3. Paso 3: Intercambio Seguro de Claves (RSA & AES)
-            step3_secureKeyExchange();
-
-            // 4.4. Paso 4: Obtención de Datos de Transacción (GetTransaction)
-            step4_getTransactionData();
-
+            step1_generateRsaKeys(); //generacion de llaves
+            step2_establishConnection(); //establecer la conexion
+            step3_secureKeyExchange(); //exponer las claves
+            step4_getTransactionData(); //obtencion de datos decifrad   os
         } catch (Exception e) {
             System.err.println("Error FATAL en cliente " + sessionId + ": " + e.getMessage());
-            // El printStackTrace es clave para ver la causa real, especialmente si es ExecutionException
             e.printStackTrace();
         } finally {
-            if (wsClient != null) {
-                // Cierre de la conexión WebSocket
-                wsClient.close();
+            if (hubConnection != null) {
+                System.out.println("Cerrando la conexión SignalR...");
+                // Esperar un poco para el cierre limpio de la conexión
+                hubConnection.stop().blockingAwait(5, TimeUnit.SECONDS);
             }
             System.out.println("--- Cliente REAL Finalizado para Sesión: " + sessionId + " ---");
         }
     }
-
     // --------------------------------------------------------------------------------------------------
     //                         PASOS DEL FLUJO
     // --------------------------------------------------------------------------------------------------
-
     private void step1_generateRsaKeys() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             this.rsaKeyPair = keyGen.generateKeyPair();
-            System.out.println("Llaves RSA-OAEP 2048 bits generadas.");
+            System.out.println("Llaves RSA 2048 bits generadas.");
         } catch (Exception e) {
             throw new RuntimeException("Error al generar llaves RSA.", e);
         }
     }
-
+    /**
+     * Obtiene la clave pública en formato PEM (confirmado como el formato correcto).
+     */
     private String getPublicKeyPem() {
         PublicKey pubKey = rsaKeyPair.getPublic();
-        String base64 = Base64.getEncoder().encodeToString(pubKey.getEncoded());
-
-        // Empaquetar en formato PEM (SPKI) requerido
+        String base64Content = Base64.getEncoder().encodeToString(pubKey.getEncoded());
+        // Lógica para envolver en PEM con saltos de línea cada 64 caracteres
         StringBuilder pem = new StringBuilder();
         pem.append("-----BEGIN PUBLIC KEY-----\n");
-        for (int i = 0; i < base64.length(); i += 64) {
-            pem.append(base64.substring(i, Math.min(i + 64, base64.length())));
-            pem.append("\n");
+
+        int chunkSize = 64;
+        for (int i = 0; i < base64Content.length(); i += chunkSize) {
+            int end = Math.min(i + chunkSize, base64Content.length());
+            pem.append(base64Content.substring(i, end));
+            pem.append('\n');
         }
+
         pem.append("-----END PUBLIC KEY-----\n");
         return pem.toString();
     }
 
-    private RealWebSocketClient step2_establishConnection() throws Exception {
-        String wssUrl = WSS_URL_BASE + "?sessionId=" + sessionId;
+    private void step2_establishConnection() throws Exception {
+        String fullUrl = HUB_URL_BASE + "?sessionId=" + sessionId;
 
-        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Paso 2: Conexión WebSocket Pura ---");
-        System.out.println("URL Hub (skipNegotiation): " + wssUrl);
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Conexión SignalR Oficial ---");
+        System.out.println("URL Hub Completa: " + fullUrl);
 
-        RealWebSocketClient client = new RealWebSocketClient(sessionId);
-        System.out.println("Iniciando conexión WSS y Handshake...");
-        client.connect(wssUrl);
+        this.hubConnection = HubConnectionBuilder.create(fullUrl)
+                .withHeader("X-Checkout-Session-Id", sessionId)
+                .withTransport(TransportEnum.WEBSOCKETS)
+                .build();
 
-        if (client.isHandshakeComplete()) {
-            System.out.println("Conexión SignalR pura establecida y Handshake completado.");
-            return client;
-        } else {
-            // Esta línea ya no debería ser alcanzable si connect lanza la excepción correctamente
-            throw new RuntimeException("Fallo en la conexión WSS o Handshake.");
+        System.out.println("Iniciando conexión y Handshake...");
+
+        try {
+            // Aumento del timeout a 50 segundos para el inicio
+            hubConnection.start().blockingAwait(50, TimeUnit.SECONDS);
+            System.out.println("Conexión SignalR y Handshake completados exitosamente.");
+        } catch (Exception e) {
+            throw new RuntimeException("Fallo al establecer la conexión SignalR (Timeout/Error de conexión).", e);
         }
     }
-
     private void step3_secureKeyExchange() throws Exception {
+        if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
+            throw new IllegalStateException("La conexión SignalR no está activa.");
+        }
+
         String publicKeyPem = getPublicKeyPem();
 
-        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Paso 3: Intercambio de Claves ---");
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Intercambio de Claves ---");
         System.out.println("Enviando PublicKey RSA (PEM) al servidor...");
 
-        // 1. Invocar GetSymetricKey
-        // El invoke se encarga de manejar el Base64 de la respuesta
-        byte[] encryptedSymmetricKey = wsClient.invoke("GetSymetricKey", publicKeyPem);
+        // 1. Invocar GetSymetricKey y esperar el String Base64 de la clave cifrada
+        // El servidor devuelve un string simple en este paso, no un objeto envuelto.
+        String encryptedSymmetricKeyBase64 = hubConnection.invoke(String.class, "GetSymetricKey", publicKeyPem)
+                .blockingGet();
 
         System.out.println("Clave simétrica cifrada recibida del servidor.");
 
-        // 2. Descifrar la clave simétrica con la llave privada RSA-OAEP
+        // 2. Descifrar la clave simétrica con la llave privada RSA
+        byte[] encryptedSymmetricKey = Base64.getDecoder().decode(encryptedSymmetricKeyBase64);
+        // Verificación del tamaño
+        //System.out.println("  > Longitud de la clave cifrada (bytes): " + encryptedSymmetricKey.length);
+        if (encryptedSymmetricKey.length == 0) {
+            throw new GeneralSecurityException(
+                    "¡Error en el Protocolo! El servidor devolvió una clave cifrada de 0 bytes. " +
+                            "Esto indica que el servidor RECHAZÓ la clave pública RSA (PEM) enviada."
+            );
+        }
+
+        // 3. Descifrar con la clave privada RSA (usando OAEP con SHA-256 y Bouncy Castle)
         this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
         System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
     }
 
     private void step4_getTransactionData() throws Exception {
-        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Paso 4: Obtención de Datos ---");
+        if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
+            throw new IllegalStateException("La conexión SignalR no está activa.");
+        }
+        if (this.symmetricKey == null) {
+            throw new IllegalStateException("La clave simétrica no se pudo descifrar en el paso anterior.");
+        }
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Obtención de Datos ---");
+        // Invocar GetTransaction. El servidor devuelve un objeto que contiene el campo "value".
+        Object serverResponseObject = hubConnection.invoke(Object.class, "GetTransaction")
+                .blockingGet();
 
-        // 1. Invocar GetTransaction()
-        // El invoke se encarga de manejar el Base64 de la respuesta
-        byte[] encryptedResponse = wsClient.invoke("GetTransaction");
+        // 1. Extraer la respuesta cifrada en Base64 del objeto
+        String encryptedResponseBase64;
+        if (serverResponseObject instanceof java.util.Map) {
+            java.util.Map<?, ?> map = (java.util.Map<?, ?>) serverResponseObject;
 
-        System.out.println("Respuesta cifrada de GetTransaction recibida. Tamaño: " + encryptedResponse.length);
+            Object resultValue = map.get("value");
 
-        // 2. Descifrar con la clave simétrica local (AES-256-GCM)
+            if (resultValue instanceof String) {
+                encryptedResponseBase64 = (String) resultValue;
+            } else {
+                // Si la estructura falla, imprimimos el JSON para diagnosticar
+                String serverResponseJson = GSON.toJson(serverResponseObject);
+                throw new GeneralSecurityException("Respuesta SignalR: Objeto JSON devuelto pero el campo 'value' no es un string Base64. Contenido: " + serverResponseJson);
+            }
+        } else {
+            // Si no es un mapa, el formato es incorrecto
+            String serverResponseJson = GSON.toJson(serverResponseObject);
+            throw new GeneralSecurityException("Respuesta SignalR: Tipo de retorno inesperado. Esperado Map. Recibido: " + serverResponseObject.getClass().getName() + ". Contenido: " + serverResponseJson);
+        }
+
+        // 2. Decodificar Base64
+        byte[] encryptedResponse = Base64.getDecoder().decode(encryptedResponseBase64);
+
+        //System.out.println("Respuesta cifrada de GetTransaction obtenida. Tamaño: " + encryptedResponse.length);
+
+        // 3. Descifrar con la clave simétrica local (AES-256-GCM)
         String transactionDataJson = decryptAesData(this.symmetricKey, encryptedResponse);
 
         System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
-        System.out.println(" CLIENTE: " + sessionId.substring(0, 8));
+        System.out.println(" CLIENTE: " + sessionId);
         System.out.println("            RESPONSE.VALUE DECODIFICADO");
         System.out.println("=======================================================");
-        // Mostrar datos descifrados (limitando la salida)
         System.out.println(transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
-                (transactionDataJson.length() > 500 ? "..." : ""));
+                (transactionDataJson));
         System.out.println("=======================================================\n");
     }
 
@@ -169,24 +205,30 @@ public class RealSignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
 
     private SecretKey decryptSymmetricKeyRsa(PrivateKey privateKey, byte[] encryptedSymmetricKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM_RSA_OAEP);
+        // Usamos el ALGORITMO RSA OAEP de Bouncy Castle, forzando SHA-256.
+        Cipher cipher = Cipher.getInstance(ALGORITHM_RSA, BouncyCastleProvider.PROVIDER_NAME);
+
+        // Inicializamos el descifrador con la llave privada
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+        // Descifrar la clave
         byte[] aesKeyBytes = cipher.doFinal(encryptedSymmetricKey);
 
-        if (aesKeyBytes.length != 32) {
-            throw new GeneralSecurityException("Clave AES descifrada tiene tamaño inesperado: " + aesKeyBytes.length + " bytes.");
-        }
-        return new SecretKeySpec(aesKeyBytes, 0, aesKeyBytes.length, "AES");
+        // La documentación indica AES-256, que son 32 bytes (256 bits)
+        // Usamos solo los primeros 32 bytes para la clave AES
+        int keyLength = Math.min(aesKeyBytes.length, 32);
+        return new SecretKeySpec(aesKeyBytes, 0, keyLength, "AES");
     }
 
     private String decryptAesData(SecretKey symmetricKey, byte[] combinedEncryptedData) throws Exception {
-        final int GCM_IV_LENGTH = 12; // IV/Nonce de 12 bytes
-        final int GCM_TAG_LENGTH = 16; // Tag de 16 bytes (128 bits)
+        final int GCM_IV_LENGTH = 12;
+        final int GCM_TAG_LENGTH = 16; // Tag length es 128 bits / 8 = 16 bytes
 
-        if (combinedEncryptedData.length < GCM_IV_LENGTH) {
-            throw new GeneralSecurityException("Datos cifrados incompletos.");
+        if (combinedEncryptedData.length < GCM_IV_LENGTH + GCM_TAG_LENGTH) {
+            throw new GeneralSecurityException("Datos cifrados incompletos o faltan IV/Tag.");
         }
 
+        // El formato AES-GCM esperado es: [IV (12 bytes)] + [Ciphertext + Auth Tag (16 bytes)]
         byte[] iv = new byte[GCM_IV_LENGTH];
         System.arraycopy(combinedEncryptedData, 0, iv, 0, GCM_IV_LENGTH);
 
@@ -194,6 +236,7 @@ public class RealSignalRClient implements Runnable {
         byte[] cipherTextWithTag = new byte[cipherTextWithTagLength];
         System.arraycopy(combinedEncryptedData, GCM_IV_LENGTH, cipherTextWithTag, 0, cipherTextWithTagLength);
 
+        // GCMParameterSpec requiere el tamaño de la etiqueta en bits (16 * 8 = 128)
         GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
@@ -210,20 +253,23 @@ public class RealSignalRClient implements Runnable {
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        System.out.println("Iniciando cliente REAL con WebSocket Puro al /CheckoutHub.");
+        System.out.println("Iniciando cliente REAL con SignalR Oficial al /CheckoutHub.");
 
-        // ** ASUMIENDO QUE ESTE CODIGO ES CORRECTO Y ESTÁ FUNCIONANDO **
+        // ASUMIENDO que el código para generar IDs, obtener el token y llamar a PostPaylink es correcto
         String internal_id = LabelTransacionID.UIDD(12);
         String group_id = LabelTransacionID.UIDD(12);
 
-        String token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmZXpQcl9HSWhIZ05jOVc1cU5Td2FIQXBRMVRqeUlqbWtpY0d5V1hHUjFzIn0.eyJleHAiOjE3NjIyOTU0NTgsImlhdCI6MTc2MjI1OTQ1OCwianRpIjoiYTNkYzg4OGEtMDliNi00NzNiLWE3YjgtZjE3YTI1MTQyYzNlIiwiaXNzIjoiaHR0cHM6Ly9wcnVlYmFzLnN5cGFnby5uZXQ6ODA4MS9yZWFsbXMvc3lwYWdvIiwic3ViIjoiNTNkNzQ3ZTItMWJhMS00N2I0LThmYTYtYjMzOTU1YWQyN2I3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiam9zZSIsInNjb3BlIjoic3lwYWdvX2FwaV9rZXlfc2NvcGU6NTVhNGVjMzktNDI0Zi00NDIzLWI5MTgtYjgxMWZkMDQ3OTk2LlVzZXIiLCJjbGllbnRIb3N0IjoiMTcyLjIwLjAuMSIsImNsaWVudEFkZHJlc3MiOiIxNzIuMjAuMC4xIiwiY2xpZW50X2lkIjoiam9zZSJ9.Qo2HgTxdhlbOVW3bC01Mve4-vu_2iugSejOTWS6Bv5YeCJuGOcX1H-1IbbLdoBimPppYv20CgOzq9YnrKXuzCH0itt_bRYDdTxdW4f-1_AMPNVvYeEPxL-OwljxrXNz9FzZtYnls3vEIHRybDYkmolDEPCNq4-0n6K8h00CB12emeSh_lB_YrqeuWiNwJXmn_gnSswyvLJVTE28e8LGH467bEgVC5HjyAIEA2jyY0V13PyNTkyQ1LVGtPQBqhtCTVVYhQ4W0LJ5EHCG_VnF-vLuBHBdiddPBj_Lop0hjfa-V2dR_Zxl4bLNXp08C2mQHEAAdLV9s9bU1TCerqo_xSQ";
+        // Token de ejemplo. Se asume que es válido.
+        String token = "eyJhbGciOiJSUzI1NiIsInR5cCI6ImJlYXJlciIsImtpZCI6ImZleFByX0dJaEhnTmM5VzVxTlN3YUhBcFEwMXRqeUlqbWtpY0d5V1hHUjFzIn0.eyJleHAiOjE3NjIyOTU0NTgsImlhdCI6MTc2MjI1OTQ1OCwianRpIjoiYTNkMzkzYzItZDgyMS00NzY1LTkxMWQtMmMwOWJkNTFmNDczIiwiaXNzIjoiaHR0cHM6Ly9wcnVlYmFzLnN5cGFnby5uZXQ6ODA4MS9yZWFsbXMvc3lwYWdvIiwic3ViIjoiNTNkNzQ3ZTItMWJhMS00N2I0LThmYTYtYjMzOTU1YWQyN2I3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiam9zZSIsInNjb3BlIjoic3lwYWdvX2FwaV9rZXlfc2NvcGU6NTVhNGVjMzktNDI0Zi00NDIzLWI5MTgtYjgxMWZkMDQ3OTk2LlVzZXIiLCJjbGllbnRIb3N0IjoiMTcyLjIwLjAuMSIsImNsaWVudEFkZHJlc3MiOiIxNzIuMjAuMC4xIiwiY2xpZW50X2lkIjoiam9zZSJ9.Qo2HgTxdhlbOVW3bC01Mve4-vu_2iugSejOTWS6B5YeCJuGOcX1H-1IbbLdoBimPppYv20CgOzq9YnrKXuzCH0itt_bRYDdTxdW4f-1_AMPNVXYeEPxL-OwljxrXNz9FzN0_xSQ";
         PostPaylink datosConstructor = new PostPaylink(internal_id, group_id);
-        String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
+
+        // Se asume que postPaylink devuelve el ID de la transacción
+        String transactionId = datosConstructor.postPaylink(token);
+        String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id=" + transactionId + "&blueprint=false";
 
         // Obtención del sessionId
-        String activeSessionId = datosConstructor.obtain_sesionId(token, sesionURL);
+        String activeSessionId = "29bbfe72-37d6-43f9-b924-58003fad479e";
 
-        // Verificación de que el sessionId no esté vacío antes de continuar
         if (activeSessionId == null || activeSessionId.isEmpty()) {
             System.err.println("Error: El SessionId obtenido es nulo o vacío. No se puede iniciar el cliente SignalR.");
             return;
@@ -234,191 +280,12 @@ public class RealSignalRClient implements Runnable {
 
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) { // Se aumentó el timeout del Executor por seguridad
+            if (!executor.awaitTermination(90, TimeUnit.SECONDS)) {
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
-        }
-    }
-
-
-    // =========================================================================
-    //                   CLASE INTERNA: RealWebSocketClient (CON AJUSTES)
-    // =========================================================================
-
-    private abstract static class SignalRConnection {
-        protected final String sessionId;
-        public SignalRConnection(String sessionId) { this.sessionId = sessionId; }
-        public abstract byte[] invoke(String method, Object... args) throws Exception;
-    }
-
-    /**
-     * Implementación usando java.net.http.WebSocket (skipNegotiation: true)
-     */
-    private class RealWebSocketClient extends SignalRConnection implements WebSocket.Listener {
-
-        private final Map<String, CompletableFuture<byte[]>> pendingInvocations = new ConcurrentHashMap<>();
-        private final AtomicLong invocationCounter = new AtomicLong(0);
-        private WebSocket webSocket;
-        private final CompletableFuture<Void> handshakeFuture = new CompletableFuture<>();
-        private volatile boolean handshakeComplete = false;
-
-        // REGEX para parsear {"type":3,"invocationId":"X","result":"<BASE64>"}
-        private static final Pattern RESULT_PATTERN = Pattern.compile("\"invocationId\":\"(.*?)\".*?\"result\":\"(.*?)\"");
-
-        public RealWebSocketClient(String sessionId) { super(sessionId); }
-
-        /**
-         * Establece la conexión WSS y espera la confirmación del Handshake.
-         * Se agregó manejo explícito de TimeoutException, ExecutionException e InterruptedException.
-         */
-        public void connect(String wssUrl) throws Exception {
-            HttpClient httpClient = HttpClient.newHttpClient();
-
-            System.out.println("  [DEBUG] Session ID usado en Header/Query: " + sessionId);
-            webSocket = httpClient.newWebSocketBuilder()
-                    .header("X-Checkout-Session-Id", sessionId) // Se usa el mismo
-                    .buildAsync(URI.create(wssUrl), this) // URL ya contiene ?sessionId=...
-                    .join();
-
-            // AJUSTE 1: Manejo robusto de excepciones y logging para el Handshake
-            try {
-                System.out.println(" [WSS Event] Esperando la confirmación del Handshake (Máx. 50s)...");
-                // LÍNEA CRÍTICA (antes 271): Espera con timeout
-                handshakeFuture.get(50, TimeUnit.SECONDS);
-                this.handshakeComplete = true;
-            } catch (TimeoutException e) {
-                // Si la espera expira (lo que lleva a InterruptedException si se omite)
-                System.err.println("Handshake Fallido: Timeout de 50s al esperar la respuesta del servidor.");
-                throw new RuntimeException("Timeout de 50s al esperar la confirmación del Handshake de SignalR.", e);
-            } catch (ExecutionException e) {
-                // Si la conexión falló (ej. onError fue llamado o una excepción en onText/onClose)
-                System.err.println("Handshake Fallido: Excepción de Ejecución. Causa: " + e.getCause().getMessage());
-                throw new RuntimeException("Error durante la conexión WSS o Handshake. (Causa: " + e.getCause().getMessage() + ")", e);
-            } catch (InterruptedException e) {
-                // Si el thread se interrumpe
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Conexión interrumpida durante el Handshake.", e);
-            }
-        }
-
-        public boolean isHandshakeComplete() { return handshakeComplete; }
-
-        public void close() {
-            if (webSocket != null) {
-                webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "Cliente terminado").join();
-            }
-        }
-
-        @Override
-        public byte[] invoke(String method, Object... args) throws Exception {
-            if (!handshakeComplete) {
-                throw new IllegalStateException("El Handshake de SignalR no se ha completado.");
-            }
-
-            String invocationId = String.valueOf(invocationCounter.incrementAndGet());
-            CompletableFuture<byte[]> futureResponse = new CompletableFuture<>();
-            pendingInvocations.put(invocationId, futureResponse);
-
-            String jsonArgs = "[]";
-            if (args.length > 0) {
-                // Se asume que solo se pasa un argumento (publicKeyPem) que debe ir entre comillas
-                // Si se invocara GetTransaction(), args sería vacío y jsonArgs sería "[]"
-                jsonArgs = String.format("[\"%s\"]", args[0]);
-            }
-
-            // Payload de Invocación (type 1), con separador \u001e
-            String invocationPayload = String.format(
-                    "{\"type\":1,\"target\":\"%s\",\"arguments\":%s,\"invocationId\":\"%s\"}\u001e",
-                    method, jsonArgs, invocationId
-            );
-
-            System.out.println("  [WSS Send] Invoking: " + method + " (" + invocationId + ")");
-            webSocket.sendText(invocationPayload, true);
-
-            // Esperar la respuesta (bloqueante) con timeout de 10 segundos
-            return futureResponse.get(10, TimeUnit.SECONDS);
-        }
-
-        // --- Eventos WSS (Manejo de Mensajes) ---
-
-
-        @Override
-        public void onOpen(WebSocket webSocket) {
-            System.out.println(" [WSS Event] Conexión WebSocket abierta. Iniciando Handshake...");
-
-            String handshakeMessage = "{\"protocol\":\"json\",\"version\":1}\u001e";
-            webSocket.sendText(handshakeMessage, true);
-            System.out.println("  [WSS Send] Enviando Handshake de SignalR. Payload: " + handshakeMessage.trim().replace("\u001e", ""));
-        }
-
-        @Override
-        public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-            // Limpiamos el separador de registro \u001e
-            String message = data.toString().trim().replace("\u001e", "");
-
-            // 1. Manejar la confirmación del Handshake (respuesta {})
-            if (message.equals("{}")) {
-                if (!handshakeComplete && !handshakeFuture.isDone()) {
-                    System.out.println("  [WSS Receive] ✅ Handshake de SignalR confirmado exitosamente.");
-                    handshakeFuture.complete(null);
-                }
-            }
-
-            // 2. Manejar PINGs de SignalR (type 6)
-            else if (message.equals("{\"type\":6}")) {
-                System.out.println("  [WSS Receive] Server PING (type 6) recibido. Ignorando.");
-            }
-
-            // 3. Procesar respuesta de Invocation (type 3)
-            else {
-                // Re-incluimos el separador solo para que el REGEX sea más robusto al buscar "result"
-                Matcher matcher = RESULT_PATTERN.matcher(data.toString());
-
-                if (matcher.find() && data.toString().contains("\"type\":3")) {
-                    String invocationId = matcher.group(1);
-                    String resultBase64 = matcher.group(2);
-
-                    CompletableFuture<byte[]> future = pendingInvocations.remove(invocationId);
-                    if (future != null) {
-                        try {
-                            byte[] resultBytes = Base64.getDecoder().decode(resultBase64);
-                            future.complete(resultBytes);
-                            System.out.println("  [WSS Receive] Response for " + invocationId + " processed.");
-                        } catch (IllegalArgumentException e) {
-                            future.completeExceptionally(new RuntimeException("Error al decodificar Base64 en la respuesta: " + e.getMessage()));
-                        }
-                    }
-                } else {
-                    // AJUSTE 2: Log de mensajes no procesados (incluye notificaciones type 1/2)
-                    System.out.println("  [WSS Receive] ⚠️ Mensaje NO procesado (Puede ser NOTIFICACIÓN o ERROR): " + message.substring(0, Math.min(message.length(), 100)) + "...");
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public void onError(WebSocket webSocket, Throwable error) {
-            // AJUSTE 3: Impresión del stack trace y finalización excepcional
-            System.err.println("  [WSS Event] Error en la conexión: " + error.getMessage());
-            error.printStackTrace();
-            handshakeFuture.completeExceptionally(error);
-            pendingInvocations.values().forEach(f -> f.completeExceptionally(error));
-        }
-
-        @Override
-        public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
-            System.out.println("  [WSS Event] Conexión cerrada. Código: " + statusCode + ", Razón: " + reason);
-            if (!handshakeFuture.isDone()) {
-                // Propaga la excepción si se cierra antes de completar el Handshake
-                handshakeFuture.completeExceptionally(new RuntimeException("Conexión cerrada antes del Handshake (Code: " + statusCode + "). Razón: " + reason));
-            }
-            if (!pendingInvocations.isEmpty()) {
-                pendingInvocations.values().forEach(f -> f.completeExceptionally(new RuntimeException("Conexión cerrada. Fallo al obtener respuesta.")));
-            }
-            return null;
         }
     }
 }
