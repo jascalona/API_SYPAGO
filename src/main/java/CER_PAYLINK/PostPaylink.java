@@ -117,8 +117,6 @@ public class PostPaylink
             os.flush();
 
             int responseCode = connection.getResponseCode();
-            //System.out.println("Response Code: " + responseCode);
-
             if (responseCode == 200){
                 StringBuilder response =new StringBuilder();
 
@@ -129,7 +127,6 @@ public class PostPaylink
                     }
                 }
                 connection.disconnect();
-                //System.out.println(response);
                 StringBuilder id = new StringBuilder();
                 //Atajar el JSON
                 try {
@@ -196,7 +193,7 @@ public class PostPaylink
                 JsonNode rootNode = mapper.readTree(jsonString);
                 JsonNode session_id = rootNode.get("session_id");
                 if (session_id != null){
-                    String id = session_id.asText();
+                    String id =  session_id.asText();
                 }
                 else {
                     System.out.println("El session_id no pudo ser generado!");

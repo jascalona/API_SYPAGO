@@ -35,8 +35,6 @@ public class AutenticationToken {
         }
 
         int responseCode = connection.getResponseCode();
-        System.out.println("Response Code: " + responseCode);
-
         if (responseCode == 200){
             StringBuilder response = new StringBuilder();
 

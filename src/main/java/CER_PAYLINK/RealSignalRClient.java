@@ -257,17 +257,14 @@ public class RealSignalRClient implements Runnable {
 
         System.out.println("Iniciando cliente virtual con SignalR al /CheckoutHub.");
 
-        int n_transacction = 100;
+        int n_transacction = 3;
         for(int i=0; i < n_transacction; i++ ){
+            String internal_id = LabelTransacionID.UIDD(12);
+            String group_id = LabelTransacionID.UIDD(12);
 
-        String internal_id = LabelTransacionID.UIDD(12);
-        String group_id = LabelTransacionID.UIDD(12);
-
-        String token = AutenticationToken.mapperToken();
-        PostPaylink generate_transacction = new PostPaylink(internal_id, group_id);
-
-            String url_sessionId =  "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="
-                    + generate_transacction.postPaylink(token)+"&=blueprint=false";
+            String token = AutenticationToken.mapperToken();
+            PostPaylink generate_transacction = new PostPaylink(internal_id, group_id);
+            String url_sessionId = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+generate_transacction.postPaylink(token)+"&blueprint=false";
 
             String session_id = generate_transacction.obtain_sesionId(token, url_sessionId);
 
