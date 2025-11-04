@@ -61,7 +61,7 @@ public class RealSignalRClient implements Runnable {
                 hubConnection.stop().blockingAwait(60, TimeUnit.SECONDS);
             }
              */
-           // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
+            System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
             System.out.println("------------------------------------------------------------------------------------------------------------------------------------------");
         }
     }
@@ -73,7 +73,7 @@ public class RealSignalRClient implements Runnable {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             this.rsaKeyPair = keyGen.generateKeyPair();
-           // System.out.println("Llaves RSA 2048 bits generadas.");
+            System.out.println("Llaves RSA 2048 bits generadas.");
         } catch (Exception e) {
             throw new RuntimeException("Error al generar llaves RSA.", e);
         }
@@ -102,19 +102,19 @@ public class RealSignalRClient implements Runnable {
     private void step2_establishConnection() throws Exception {
         String fullUrl = HUB_URL_BASE + "?sessionId=" + sessionId;
 
-        System.out.println("\n---Iniciando Conexión SignalR para el Cliente " + sessionId.substring(0, 8) + "---");
-        //System.out.println("URL Hub Completa: " + fullUrl);
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Conexión SignalR Oficial ---");
+        System.out.println("URL Hub Completa: " + fullUrl);
 
         this.hubConnection = HubConnectionBuilder.create(fullUrl)
                 .withHeader("X-Checkout-Session-Id", sessionId)
                 .withTransport(TransportEnum.WEBSOCKETS)
                 .build();
 
-        //System.out.println("Iniciando conexión y Handshake...");
+        System.out.println("Iniciando conexión y Handshake...");
 
         try {
-            // Aumento del timeout a 30 segundos para el inicio
-            hubConnection.start().blockingAwait(30, TimeUnit.SECONDS);
+            // Aumento del timeout a 50 segundos para el inicio
+            hubConnection.start().blockingAwait(5, TimeUnit.SECONDS);
             System.out.println("Conexión SignalR y Handshake completados exitosamente.");
         } catch (Exception e) {
             throw new RuntimeException("Fallo al establecer la conexión SignalR (Timeout/Error de conexión).", e);
@@ -127,15 +127,15 @@ public class RealSignalRClient implements Runnable {
 
         String publicKeyPem = getPublicKeyPem();
 
-        //System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Intercambio de Claves ---");
-        //System.out.println("Enviando PublicKey RSA (PEM) al servidor...");
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Intercambio de Claves ---");
+        System.out.println("Enviando PublicKey RSA (PEM) al servidor...");
 
         // 1. Invocar GetSymetricKey y esperar el String Base64 de la clave cifrada
         // El servidor devuelve un string simple en este paso, no un objeto envuelto.
         String encryptedSymmetricKeyBase64 = hubConnection.invoke(String.class, "GetSymetricKey", publicKeyPem)
                 .blockingGet();
 
-        //System.out.println("Clave simétrica cifrada recibida del servidor.");
+        System.out.println("Clave simétrica cifrada recibida del servidor.");
 
         // 2. Descifrar la clave simétrica con la llave privada RSA
         byte[] encryptedSymmetricKey = Base64.getDecoder().decode(encryptedSymmetricKeyBase64);
@@ -150,7 +150,7 @@ public class RealSignalRClient implements Runnable {
 
         // 3. Descifrar con la clave privada RSA (usando OAEP con SHA-256 y Bouncy Castle)
         this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
-        //System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
+        System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
     }
 
     private void step4_getTransactionData() throws Exception {
@@ -160,7 +160,7 @@ public class RealSignalRClient implements Runnable {
         if (this.symmetricKey == null) {
             throw new IllegalStateException("La clave simétrica no se pudo descifrar en el paso anterior.");
         }
-        System.out.println("\n--- Obtención de Datos para el Cliente " + sessionId.substring(0, 8) + " ---");
+        System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Obtención de Datos ---");
         // Invocar GetTransaction. El servidor devuelve un objeto que contiene el campo "value".
         Object serverResponseObject = hubConnection.invoke(Object.class, "GetTransaction")
                 .blockingGet();
@@ -193,7 +193,7 @@ public class RealSignalRClient implements Runnable {
         // 3. Descifrar con la clave simétrica local (AES-256-GCM)
         String transactionDataJson = decryptAesData(this.symmetricKey, encryptedResponse);
 
-        //System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
+        System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
         System.out.println(" CLIENTE: " + sessionId);
         System.out.println("            RESPONSE.VALUE DECODIFICADO");
@@ -257,7 +257,7 @@ public class RealSignalRClient implements Runnable {
 
         System.out.println("Iniciando cliente virtual con SignalR al /CheckoutHub.");
 
-        int n_transacction = 2;
+        int n_transacction = 10;
         for(int i=0; i < n_transacction; i++ ){
             String internal_id = LabelTransacionID.UIDD(12);
             String group_id = LabelTransacionID.UIDD(12);
