@@ -1,4 +1,5 @@
 package CER_PAYLINK;
+
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.TransportEnum;
@@ -41,6 +42,7 @@ public class SignalRClient implements Runnable {
             //System.out.println("Proveedor Bouncy Castle registrado.");
         }
     }
+
     // --------------------------------------------------------------------------------------------------
     //                                  FLUJO PRINCIPAL
     // --------------------------------------------------------------------------------------------------
@@ -67,6 +69,7 @@ public class SignalRClient implements Runnable {
             // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
         }
     }
+
     // --------------------------------------------------------------------------------------------------
     //                         PASOS DEL FLUJO
     // --------------------------------------------------------------------------------------------------
@@ -80,6 +83,7 @@ public class SignalRClient implements Runnable {
             throw new RuntimeException("Error al generar llaves RSA.", e);
         }
     }
+
     /**
      * Obtiene la clave pública en formato PEM (confirmado como el formato correcto).
      */
@@ -122,6 +126,7 @@ public class SignalRClient implements Runnable {
             throw new RuntimeException("Fallo al establecer la conexión SignalR (Timeout/Error de conexión).", e);
         }
     }
+
     private void step3_secureKeyExchange() throws Exception {
         if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
             throw new IllegalStateException("La conexión SignalR no está activa.");
@@ -197,7 +202,7 @@ public class SignalRClient implements Runnable {
 
         //System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
-        System.out.println(" CLIENTE: " + sessionId + "\n"+transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
+        System.out.println(" CLIENTE: " + sessionId + "\n" + transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
                 (transactionDataJson));
         System.out.println("=======================================================\n");
     }
@@ -256,11 +261,10 @@ public class SignalRClient implements Runnable {
     private static final int BATCH_SIZE = 2; // Transacciones por lote
     //private static final long PAUSE_TIME_MS = 1000; // Pausa entre lotes
 
-
     /*  PARA TENER EN CUENTA:
         RECALCULAR EL TIEMPO DE EJECUCION FINAL TENIENDO EN CUENTA EL TIMEOUT PARA EL BLOQUEO DE LA INICIACION DE HILOS
     */
-    private static final long TOTAL_RUN_TIME_SECONDS = 6; // Tiempo total de ejecucion
+    private static final long TOTAL_RUN_TIME_SECONDS = 50; // Tiempo total de ejecucion
 
     // Integracion del Timeout para esperar el resultado de cada transacción del lote
     private static final long TRANSACTION_TIMEOUT_SECONDS = 5;
@@ -283,12 +287,12 @@ public class SignalRClient implements Runnable {
         System.out.println("  - Tiempo Total de Ejecución: " + TOTAL_RUN_TIME_SECONDS + " segundos.");
         System.out.println("---------------------------------------------------------------------");
 
+        var count = 0;
         // Bucle principal controlado por el tiempo total de ejecución
         while (System.currentTimeMillis() < endTime) {
 
             // Lista SOLO para las Futures del lote actual
             List<Future<String>> currentBatchFutures = new ArrayList<>();
-
             // --- Fase de Generacion de Lote (Envío) ---
             for (int i = 0; i < BATCH_SIZE; i++) {
                 //Instancia del TransactionTask con la lógica de negocio
@@ -296,7 +300,10 @@ public class SignalRClient implements Runnable {
                 Future<String> future = executor.submit(task);
                 currentBatchFutures.add(future);
                 allFutures.add(future);
+                count++;
             }
+
+            System.out.println("Total messages: " + count);
             // --- Espera y Recolección de Resultados del Lote Actual (Punto de Sincronización) ---
             int completedInBatch = 0;
             int failedInBatch = 0;
@@ -373,8 +380,7 @@ public class SignalRClient implements Runnable {
             } catch (CancellationException e) {
                 // El futuro fue cancelado (probablemente por timeout en el lote)
                 failed++;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 failed++;
             }
         }
