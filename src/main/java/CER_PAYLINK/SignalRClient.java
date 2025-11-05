@@ -1,5 +1,4 @@
 package CER_PAYLINK;
-import Utiliti.LabelTransacionID;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.TransportEnum;
@@ -15,15 +14,13 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import java.util.concurrent.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 //Proveedor de criptografía
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class RealSignalRClient implements Runnable {
+public class SignalRClient implements Runnable {
     private static final String HUB_URL_BASE = "https://pruebas.app.sypago.net:8086/CheckoutHub";
     // Algoritmo de descifrado (Confirmado como el correcto: RSA OAEP con SHA-256)
     private static final String ALGORITHM_RSA = "RSA/NONE/OAEPWithSHA256AndMGF1Padding";
@@ -36,12 +33,12 @@ public class RealSignalRClient implements Runnable {
     private SecretKey symmetricKey;
     private HubConnection hubConnection;
 
-    public RealSignalRClient(String sessionId) {
+    public SignalRClient(String sessionId) {
         this.sessionId = sessionId;
         // Registrar el proveedor Bouncy Castle
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
-            System.out.println("Proveedor Bouncy Castle registrado.");
+            //System.out.println("Proveedor Bouncy Castle registrado.");
         }
     }
     // --------------------------------------------------------------------------------------------------
@@ -49,7 +46,7 @@ public class RealSignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
     @Override
     public void run() {
-        System.out.println("\n--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
+        System.out.println("--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
         try {
             step1_generateRsaKeys(); //generacion de llaves
             step2_establishConnection(); //establecer la conexion
@@ -58,6 +55,7 @@ public class RealSignalRClient implements Runnable {
         } catch (Exception e) {
             System.err.println("Error FATAL en cliente " + sessionId + ": " + e.getMessage());
             e.printStackTrace();
+
         } finally {
             /*
             if (hubConnection != null) {
@@ -66,7 +64,7 @@ public class RealSignalRClient implements Runnable {
                 hubConnection.stop().blockingAwait(60, TimeUnit.SECONDS);
             }
              */
-           // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
+            // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
         }
     }
     // --------------------------------------------------------------------------------------------------
@@ -77,7 +75,7 @@ public class RealSignalRClient implements Runnable {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             this.rsaKeyPair = keyGen.generateKeyPair();
-           // System.out.println("Llaves RSA 2048 bits generadas.");
+            // System.out.println("Llaves RSA 2048 bits generadas.");
         } catch (Exception e) {
             throw new RuntimeException("Error al generar llaves RSA.", e);
         }
@@ -252,28 +250,104 @@ public class RealSignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
+    private static final int THREAD_SIZE = 2; // Hilos de ejecucion contemporaneos
 
-    private static final int THREAD_POOL_SIZE = 15;
-    private static final int NUMBER_OF_TRANSACTIONS = 15;
-    private static final long TIMEOUT_SECONDS = 120;
+    // --- Configuración del Lote (SemAforo de Tiempo) ---
+    private static final int BATCH_SIZE = 2; // Transacciones por lote
+    //private static final long PAUSE_TIME_MS = 1000; // Pausa entre lotes
+
+
+    /*  PARA TENER EN CUENTA:
+        RECALCULAR EL TIEMPO DE EJECUCION FINAL TENIENDO EN CUENTA EL TIMEOUT PARA EL BLOQUEO DE LA INICIACION DE HILOS
+    */
+    private static final long TOTAL_RUN_TIME_SECONDS = 6; // Tiempo total de ejecucion
+
+    // Integracion del Timeout para esperar el resultado de cada transacción del lote
+    private static final long TRANSACTION_TIMEOUT_SECONDS = 5;
 
     public static void main(String[] args) throws IOException {
+        ExecutorService executor = Executors.newFixedThreadPool(THREAD_SIZE);
+        // Lista para todas las futures (para el reporte final)
+        List<Future<String>> allFutures = new ArrayList<>();
 
-        ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        List<Future<String>> futures = new ArrayList<>();
+        // Control de tiempo total
+        long startTime = System.currentTimeMillis();
+        long endTime = startTime + (TOTAL_RUN_TIME_SECONDS * 1000);
+        int transactionCounter = 0; // Contador para el indice de la transacción
 
-        System.out.println("Configuración: " + THREAD_POOL_SIZE + " TPS para " + NUMBER_OF_TRANSACTIONS + " transacciones.");
+        System.out.println("--- Parametros de Configuracion ---");
+        System.out.println("  - Hilos de ejecucion: " + THREAD_SIZE);
+        System.out.println("  - Lote: " + BATCH_SIZE + " transacciones por lote.");
+        //System.out.println("  - Pausa entre lotes (espera): " + PAUSE_TIME_MS + " ms.");
+        System.out.println("  - Timeout por Transacción: " + TRANSACTION_TIMEOUT_SECONDS + " segundos.");
+        System.out.println("  - Tiempo Total de Ejecución: " + TOTAL_RUN_TIME_SECONDS + " segundos.");
         System.out.println("---------------------------------------------------------------------");
 
-        for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++) {
-            Callable<String> task = new TransactionTask(i);
-            futures.add(executor.submit(task));
-        }
+        // Bucle principal controlado por el tiempo total de ejecución
+        while (System.currentTimeMillis() < endTime) {
 
+            // Lista SOLO para las Futures del lote actual
+            List<Future<String>> currentBatchFutures = new ArrayList<>();
+
+            // --- Fase de Generacion de Lote (Envío) ---
+            for (int i = 0; i < BATCH_SIZE; i++) {
+                //Instancia del TransactionTask con la lógica de negocio
+                Callable<String> task = new TransactionTask(transactionCounter++);
+                Future<String> future = executor.submit(task);
+                currentBatchFutures.add(future);
+                allFutures.add(future);
+            }
+            // --- Espera y Recolección de Resultados del Lote Actual (Punto de Sincronización) ---
+            int completedInBatch = 0;
+            int failedInBatch = 0;
+
+            for (Future<String> future : currentBatchFutures) {
+                try {
+                    // AQUI BLOQUEAMOS EL HILO PRINCIPAL hasta que la tarea termine o haya timeout.
+                    // Si el servidor tarda, el hilo principal espera aquí.
+                    future.get(TRANSACTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                    completedInBatch++;
+                } catch (TimeoutException e) {
+                    future.cancel(true); // Cancelar si hay timeout
+                    failedInBatch++;
+                    System.err.printf("[TIMEOUT] Transacción no completada en %d segundos.\n", TRANSACTION_TIMEOUT_SECONDS);
+                } catch (Exception e) {
+                    failedInBatch++;
+                    System.err.println("[FALLO] Excepción al obtener resultado: " + e.getMessage());
+                }
+            }
+
+            // --- Reporte de Progreso y Pausa ---
+            long currentTime = System.currentTimeMillis();
+            long timeElapsed = (currentTime - startTime) / 1000;
+            System.out.printf("--- LOTE COMPLETADO ---\n");
+
+            // --- Fase de Pausa  ---
+            if (System.currentTimeMillis() < endTime) {
+                //  System.out.printf("Iniciando pausa de %d ms antes del siguiente lote.\n", PAUSE_TIME_MS);
+                System.out.println("\n-- INICIANDO EL SIGUIENTE LOTE --");
+                /*
+                try {
+                    Thread.sleep(PAUSE_TIME_MS);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("El hilo principal fue interrumpido durante la pausa.");
+                    break;
+                }
+                 */
+            }
+        }
+        // Reporte final
+        System.out.println("\n---------------------------------------------------------------------");
+        System.out.println("El tiempo total de ejecución ha finalizado.");
+        System.out.println("Total de Transacciones enviadas: " + transactionCounter + "");
+        System.out.println("Iniciando apagado ordenado de servicios...");
+        // --- Apagado y Recolección de Resultados ---
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                System.out.println("\nLas tareas no terminaron a tiempo (Timeout), forzando apagado.");
+            // Esperar a que todas las tareas terminen
+            if (!executor.awaitTermination(TOTAL_RUN_TIME_SECONDS, TimeUnit.SECONDS)) {
+                System.out.println("\nLas tareas no terminaron a tiempo, forzando apagado.");
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -282,16 +356,32 @@ public class RealSignalRClient implements Runnable {
             Thread.currentThread().interrupt();
         }
 
-        // --- Centralización de la Salida ---
-        System.out.println("\n--- Resultados de las TPS ---");
+        // Usamos allFutures para el reporte final
+        int completed = 0;
+        int failed = 0;
 
-        for (Future<String> future : futures) {
+        for (Future<String> future : allFutures) {
             try {
-                System.out.println(future.get());
-            } catch (Exception e) {
-                System.err.println("[FALLO FATAL] Excepción al obtener resultado: " + e.getMessage());
+                // Si la future fue cancelada por timeout, get() lanzará una CancellationException.
+                // Se usa un timeout breve aquí, pues la espera real ya se hizo en el bucle principal.
+                String result = future.get(1, TimeUnit.MILLISECONDS);
+                if (result.startsWith("[COMPLETADA]")) {
+                    completed++;
+                } else if (result.startsWith("[ERROR]") || result.startsWith("[FALLO FATAL]")) {
+                    failed++;
+                }
+            } catch (CancellationException e) {
+                // El futuro fue cancelado (probablemente por timeout en el lote)
+                failed++;
+            }
+            catch (Exception e) {
+                failed++;
             }
         }
+        System.out.println("\n--- Resumen de Resultados ---");
+        System.out.println("Transacciones Enviadas: " + transactionCounter);
+        System.out.println("Transacciones Completadas (OK): " + completed);
+        System.out.println("Transacciones fallidas o con Timeout: " + failed);
         System.out.println("---------------------------------------------------------------------");
     }
 }
