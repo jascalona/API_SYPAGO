@@ -25,15 +25,24 @@ public class TransactionTask implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        // *********** LOGICA CONCURRENTE ***********
+        // ... (generate_session_id se mantiene igual)
         String session_id = TransactionTask.generate_session_id();
 
         if (session_id == null || session_id.isEmpty()) {
-            return "[ERROR] Tarea " + transaccionIndex + ": El SessionId obtenido es nulo o vacío.";
+            // Fallo en la generación del ID se sigue reportando como ERROR
+            throw new RuntimeException("El SessionId obtenido es nulo o vacío.");
         }
+
         // Iniciar el cliente SignalR
-        Runnable clientTask = new SignalRClient(session_id);
-        clientTask.run();
+        // CAMBIO CRÍTICO: Ahora SignalRClient es un Callable, no Runnable.
+        // Llamamos a su .call() y si devuelve true, es éxito.
+        Callable<Boolean> clientTask = new SignalRClient(session_id);
+
+        // Si el cliente lanza una excepción, esta será capturada por Future.get() en main.
+        // Si no lanza una excepción y devuelve true, es éxito.
+        clientTask.call();
+
+        // Si la llamada no lanzó excepción, es éxito.
         return "[COMPLETADA] Transaccion " + transaccionIndex + " con Session ID: " + session_id;
     }
 }

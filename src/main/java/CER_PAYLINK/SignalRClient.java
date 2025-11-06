@@ -17,16 +17,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//Proveedor de criptografía
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-public class SignalRClient implements Runnable {
+public class SignalRClient implements Callable<Boolean> {
     private static final String HUB_URL_BASE = "https://pruebas.app.sypago.net:8086/CheckoutHub";
-    // Algoritmo de descifrado (Confirmado como el correcto: RSA OAEP con SHA-256)
     private static final String ALGORITHM_RSA = "RSA/NONE/OAEPWithSHA256AndMGF1Padding";
-
-    // Objeto GSON para extraer el campo "value" del objeto de respuesta de SignalR
     private static final Gson GSON = new Gson();
 
     private final String sessionId;
@@ -36,10 +31,8 @@ public class SignalRClient implements Runnable {
 
     public SignalRClient(String sessionId) {
         this.sessionId = sessionId;
-        // Registrar el proveedor Bouncy Castle
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
-            //System.out.println("Proveedor Bouncy Castle registrado.");
         }
     }
 
@@ -47,26 +40,36 @@ public class SignalRClient implements Runnable {
     //                                  FLUJO PRINCIPAL
     // --------------------------------------------------------------------------------------------------
     @Override
-    public void run() {
+    public Boolean call() throws Exception {
         System.out.println("--- Cliente virtual Iniciado para Sesión: " + sessionId + " ---");
         try {
-            step1_generateRsaKeys(); //generacion de llaves
-            step2_establishConnection(); //establecer la conexion
-            step3_secureKeyExchange(); //exponer las claves
-            step4_getTransactionData(); //obtencion de datos decifrad   os
+            step1_generateRsaKeys();
+
+            step2_establishConnection();
+            if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
+                System.err.println("Descartando sesión " + sessionId + ": Conexión SignalR no establecida o fallida.");
+                throw new RuntimeException("Fallo en la conexión SignalR.");
+            }
+
+            step3_secureKeyExchange();
+            if (this.symmetricKey == null) {
+                System.err.println("Descartando sesión " + sessionId + ": Intercambio de clave simétrica fallido.");
+                throw new RuntimeException("Fallo en el intercambio de clave simétrica.");
+            }
+
+            step4_getTransactionData();
+
+            return true;
+
         } catch (Exception e) {
             System.err.println("Error FATAL en cliente " + sessionId + ": " + e.getMessage());
-            e.printStackTrace();
 
-        } finally {
-            /*
-            if (hubConnection != null) {
-                System.out.println("Cerrando la conexión SignalR...");
-                // Esperar un poco para el cierre limpio de la conexión
-                hubConnection.stop().blockingAwait(60, TimeUnit.SECONDS);
+            if (e.getCause() instanceof InterruptedException || e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
             }
-             */
-            // System.out.println("--- Se mantendra la sesion abierta hasta que expire la sesion: " + sessionId + " ---");
+
+            throw e;
+
         }
     }
 
@@ -78,19 +81,14 @@ public class SignalRClient implements Runnable {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             this.rsaKeyPair = keyGen.generateKeyPair();
-            // System.out.println("Llaves RSA 2048 bits generadas.");
         } catch (Exception e) {
             throw new RuntimeException("Error al generar llaves RSA.", e);
         }
     }
 
-    /**
-     * Obtiene la clave pública en formato PEM (confirmado como el formato correcto).
-     */
     private String getPublicKeyPem() {
         PublicKey pubKey = rsaKeyPair.getPublic();
         String base64Content = Base64.getEncoder().encodeToString(pubKey.getEncoded());
-        // Lógica para envolver en PEM con saltos de línea cada 64 caracteres
         StringBuilder pem = new StringBuilder();
         pem.append("-----BEGIN PUBLIC KEY-----\n");
 
@@ -108,22 +106,19 @@ public class SignalRClient implements Runnable {
     private void step2_establishConnection() throws Exception {
         String fullUrl = HUB_URL_BASE + "?sessionId=" + sessionId;
 
-        //System.out.println("\n---Iniciando Conexión SignalR para el Cliente " + sessionId.substring(0, 8) + "---");
-        //System.out.println("URL Hub Completa: " + fullUrl);
-
         this.hubConnection = HubConnectionBuilder.create(fullUrl)
                 .withHeader("X-Checkout-Session-Id", sessionId)
                 .withTransport(TransportEnum.WEBSOCKETS)
                 .build();
 
-        //System.out.println("Iniciando conexión y Handshake...");
-
         try {
-            // Aumento del timeout a 30 segundos para el inicio
+            // Timeout de inicio de conexión
             hubConnection.start().blockingAwait(30, TimeUnit.SECONDS);
             System.out.println("Conexión SignalR y Handshake completados exitosamente.");
         } catch (Exception e) {
-            throw new RuntimeException("Fallo al establecer la conexión SignalR (Timeout/Error de conexión).", e);
+            System.err.println("Fallo al establecer la conexión SignalR para " + sessionId + " (Timeout/Error de conexión).");
+            this.hubConnection = null;
+            throw new RuntimeException("Fallo en la conexión SignalR (Timeout/Error de conexión).", e);
         }
     }
 
@@ -134,30 +129,32 @@ public class SignalRClient implements Runnable {
 
         String publicKeyPem = getPublicKeyPem();
 
-        //System.out.println("\n--- Cliente " + sessionId.substring(0, 8) + ": Intercambio de Claves ---");
-        //System.out.println("Enviando PublicKey RSA (PEM) al servidor...");
+        try {
+            String encryptedSymmetricKeyBase64 = hubConnection.invoke(
+                            String.class,
+                            "GetSymetricKey",
+                            publicKeyPem
+                    )
 
-        // 1. Invocar GetSymetricKey y esperar el String Base64 de la clave cifrada
-        // El servidor devuelve un string simple en este paso, no un objeto envuelto.
-        String encryptedSymmetricKeyBase64 = hubConnection.invoke(String.class, "GetSymetricKey", publicKeyPem)
-                .blockingGet();
+                    .blockingGet();
 
-        //System.out.println("Clave simétrica cifrada recibida del servidor.");
+            // 2. Descifrar la clave simétrica con la llave privada RSA
+            byte[] encryptedSymmetricKey = Base64.getDecoder().decode(encryptedSymmetricKeyBase64);
 
-        // 2. Descifrar la clave simétrica con la llave privada RSA
-        byte[] encryptedSymmetricKey = Base64.getDecoder().decode(encryptedSymmetricKeyBase64);
-        // Verificación del tamaño
-        //System.out.println("  > Longitud de la clave cifrada (bytes): " + encryptedSymmetricKey.length);
-        if (encryptedSymmetricKey.length == 0) {
-            throw new GeneralSecurityException(
-                    "¡Error en el Protocolo! El servidor devolvió una clave cifrada de 0 bytes. " +
-                            "Esto indica que el servidor RECHAZÓ la clave pública RSA (PEM) enviada."
-            );
+            if (encryptedSymmetricKey.length == 0) {
+                throw new GeneralSecurityException(
+                        "¡Error en el Protocolo! El servidor devolvió una clave cifrada de 0 bytes. " +
+                                "Esto indica que el servidor RECHAZÓ la clave pública RSA (PEM) enviada."
+                );
+            }
+
+            // 3. Descifrar con la clave privada RSA
+            this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
+
+        } catch (Exception e) {
+            this.symmetricKey = null;
+            throw e;
         }
-
-        // 3. Descifrar con la clave privada RSA (usando OAEP con SHA-256 y Bouncy Castle)
-        this.symmetricKey = decryptSymmetricKeyRsa(rsaKeyPair.getPrivate(), encryptedSymmetricKey);
-        //System.out.println("Clave simétrica AES descifrada y almacenada correctamente.");
     }
 
     private void step4_getTransactionData() throws Exception {
@@ -167,8 +164,8 @@ public class SignalRClient implements Runnable {
         if (this.symmetricKey == null) {
             throw new IllegalStateException("La clave simétrica no se pudo descifrar en el paso anterior.");
         }
-        //System.out.println("\n--- Obtención de Datos para el Cliente " + sessionId.substring(0, 8) + " ---");
-        // Invocar GetTransaction. El servidor devuelve un objeto que contiene el campo "value".
+
+        // Invocar GetTransaction.
         Object serverResponseObject = hubConnection.invoke(Object.class, "GetTransaction")
                 .blockingGet();
 
@@ -182,12 +179,10 @@ public class SignalRClient implements Runnable {
             if (resultValue instanceof String) {
                 encryptedResponseBase64 = (String) resultValue;
             } else {
-                // Si la estructura falla, imprimimos el JSON para diagnosticar
                 String serverResponseJson = GSON.toJson(serverResponseObject);
                 throw new GeneralSecurityException("Respuesta SignalR: Objeto JSON devuelto pero el campo 'value' no es un string Base64. Contenido: " + serverResponseJson);
             }
         } else {
-            // Si no es un mapa, el formato es incorrecto
             String serverResponseJson = GSON.toJson(serverResponseObject);
             throw new GeneralSecurityException("Respuesta SignalR: Tipo de retorno inesperado. Esperado Map. Recibido: " + serverResponseObject.getClass().getName() + ". Contenido: " + serverResponseJson);
         }
@@ -195,15 +190,12 @@ public class SignalRClient implements Runnable {
         // 2. Decodificar Base64
         byte[] encryptedResponse = Base64.getDecoder().decode(encryptedResponseBase64);
 
-        //System.out.println("Respuesta cifrada de GetTransaction obtenida. Tamaño: " + encryptedResponse.length);
-
         // 3. Descifrar con la clave simétrica local (AES-256-GCM)
         String transactionDataJson = decryptAesData(this.symmetricKey, encryptedResponse);
 
-        //System.out.println("Datos de Transacción descifrados con éxito (AES-256-GCM).");
         System.out.println("\n=======================================================");
         System.out.println(" CLIENTE: " + sessionId + "\n" + transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
-                (transactionDataJson));
+                (transactionDataJson.length() > 500 ? "..." : ""));
         System.out.println("=======================================================\n");
     }
 
@@ -212,29 +204,20 @@ public class SignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
 
     private SecretKey decryptSymmetricKeyRsa(PrivateKey privateKey, byte[] encryptedSymmetricKey) throws Exception {
-        // Usamos el ALGORITMO RSA OAEP de Bouncy Castle, forzando SHA-256.
         Cipher cipher = Cipher.getInstance(ALGORITHM_RSA, BouncyCastleProvider.PROVIDER_NAME);
-
-        // Inicializamos el descifrador con la llave privada
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-
-        // Descifrar la clave
         byte[] aesKeyBytes = cipher.doFinal(encryptedSymmetricKey);
-
-        // La documentación indica AES-256, que son 32 bytes (256 bits)
-        // Usamos solo los primeros 32 bytes para la clave AES
         int keyLength = Math.min(aesKeyBytes.length, 32);
         return new SecretKeySpec(aesKeyBytes, 0, keyLength, "AES");
     }
 
     private String decryptAesData(SecretKey symmetricKey, byte[] combinedEncryptedData) throws Exception {
         final int GCM_IV_LENGTH = 12;
-        final int GCM_TAG_LENGTH = 16; // Tag length es 128 bits / 8 = 16 bytes
+        final int GCM_TAG_LENGTH = 16;
 
         if (combinedEncryptedData.length < GCM_IV_LENGTH + GCM_TAG_LENGTH) {
             throw new GeneralSecurityException("Datos cifrados incompletos o faltan IV/Tag.");
         }
-        // El formato AES-GCM esperado es: [IV (12 bytes)] + [Ciphertext + Auth Tag (16 bytes)]
         byte[] iv = new byte[GCM_IV_LENGTH];
         System.arraycopy(combinedEncryptedData, 0, iv, 0, GCM_IV_LENGTH);
 
@@ -242,7 +225,6 @@ public class SignalRClient implements Runnable {
         byte[] cipherTextWithTag = new byte[cipherTextWithTagLength];
         System.arraycopy(combinedEncryptedData, GCM_IV_LENGTH, cipherTextWithTag, 0, cipherTextWithTagLength);
 
-        // GCMParameterSpec requiere el tamaño de la etiqueta en bits (16 * 8 = 128)
         GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
@@ -255,105 +237,90 @@ public class SignalRClient implements Runnable {
     // --------------------------------------------------------------------------------------------------
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
-    private static final int THREAD_SIZE = 2; // Hilos de ejecucion contemporaneos
 
-    // --- Configuración del Lote (SemAforo de Tiempo) ---
-    private static final int BATCH_SIZE = 2; // Transacciones por lote
-    //private static final long PAUSE_TIME_MS = 1000; // Pausa entre lotes
+    // *** CORRECCIÓN: Se aumenta el THREAD_SIZE a 20 para evitar el encolamiento ***
+    private static final int THREAD_SIZE = 10;
 
-    /*  PARA TENER EN CUENTA:
-        RECALCULAR EL TIEMPO DE EJECUCION FINAL TENIENDO EN CUENTA EL TIMEOUT PARA EL BLOQUEO DE LA INICIACION DE HILOS
-    */
-    private static final long TOTAL_RUN_TIME_SECONDS = 50; // Tiempo total de ejecucion
-
-    // Integracion del Timeout para esperar el resultado de cada transacción del lote
-    private static final long TRANSACTION_TIMEOUT_SECONDS = 5;
+    // --- Configuración del Lote ---
+    private static final int BATCH_SIZE = 5;
+    private static final int TOTAL_TRANSACTIONS = 1000;
+    private static final long TRANSACTION_TIMEOUT_SECONDS = 30; //Timeout para mayor tolerancia y consistencia
 
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_SIZE);
-        // Lista para todas las futures (para el reporte final)
         List<Future<String>> allFutures = new ArrayList<>();
 
-        // Control de tiempo total
         long startTime = System.currentTimeMillis();
-        long endTime = startTime + (TOTAL_RUN_TIME_SECONDS * 1000);
-        int transactionCounter = 0; // Contador para el indice de la transacción
+        int transactionCounter = 0;
 
         System.out.println("--- Parametros de Configuracion ---");
         System.out.println("  - Hilos de ejecucion: " + THREAD_SIZE);
         System.out.println("  - Lote: " + BATCH_SIZE + " transacciones por lote.");
-        //System.out.println("  - Pausa entre lotes (espera): " + PAUSE_TIME_MS + " ms.");
         System.out.println("  - Timeout por Transacción: " + TRANSACTION_TIMEOUT_SECONDS + " segundos.");
-        System.out.println("  - Tiempo Total de Ejecución: " + TOTAL_RUN_TIME_SECONDS + " segundos.");
+        System.out.println("  - Total de Transacciones a Ejecutar: " + TOTAL_TRANSACTIONS);
         System.out.println("---------------------------------------------------------------------");
 
-        var count = 0;
-        // Bucle principal controlado por el tiempo total de ejecución
-        while (System.currentTimeMillis() < endTime) {
+        while (transactionCounter < TOTAL_TRANSACTIONS) {
 
-            // Lista SOLO para las Futures del lote actual
+            int transactionsInBatch = Math.min(BATCH_SIZE, TOTAL_TRANSACTIONS - transactionCounter);
+
+            if (transactionsInBatch == 0) {
+                break;
+            }
+
             List<Future<String>> currentBatchFutures = new ArrayList<>();
-            // --- Fase de Generacion de Lote (Envío) ---
-            for (int i = 0; i < BATCH_SIZE; i++) {
-                //Instancia del TransactionTask con la lógica de negocio
-                Callable<String> task = new TransactionTask(transactionCounter++);
+            for (int i = 0; i < transactionsInBatch; i++) {
+                // TransactionTask debe ser Callable<String> y en su .call() ejecuta clientTask.call()
+                Callable<String> task = new TransactionTask(transactionCounter);
                 Future<String> future = executor.submit(task);
                 currentBatchFutures.add(future);
                 allFutures.add(future);
-                count++;
+                transactionCounter++;
             }
 
-            System.out.println("Total messages: " + count);
-            // --- Espera y Recolección de Resultados del Lote Actual (Punto de Sincronización) ---
+            System.out.println("Total de mensajes enviados: " + transactionCounter + " (Lote de " + transactionsInBatch + ")");
+
             int completedInBatch = 0;
             int failedInBatch = 0;
 
             for (Future<String> future : currentBatchFutures) {
                 try {
-                    // AQUI BLOQUEAMOS EL HILO PRINCIPAL hasta que la tarea termine o haya timeout.
-                    // Si el servidor tarda, el hilo principal espera aquí.
+                    // Si el Future completa sin lanzar excepción, es éxito.
                     future.get(TRANSACTION_TIMEOUT_SECONDS, TimeUnit.SECONDS);
                     completedInBatch++;
                 } catch (TimeoutException e) {
                     future.cancel(true); // Cancelar si hay timeout
                     failedInBatch++;
                     System.err.printf("[TIMEOUT] Transacción no completada en %d segundos.\n", TRANSACTION_TIMEOUT_SECONDS);
+                } catch (ExecutionException e) { // Capturar fallos internos
+                    future.cancel(true);
+                    failedInBatch++;
+                    // La excepción original lanzada por SignalRClient está envuelta.
+                    System.err.println("[FALLO INTERNO] Excepción en la tarea: " + e.getCause().getMessage());
                 } catch (Exception e) {
                     failedInBatch++;
-                    System.err.println("[FALLO] Excepción al obtener resultado: " + e.getMessage());
+                    System.err.println("[FALLO GENERAL] Excepción al obtener resultado: " + e.getMessage());
                 }
             }
 
-            // --- Reporte de Progreso y Pausa ---
-            long currentTime = System.currentTimeMillis();
-            long timeElapsed = (currentTime - startTime) / 1000;
-            System.out.printf("--- LOTE COMPLETADO ---\n");
+            long timeElapsed = (System.currentTimeMillis() - startTime) / 1000;
+            System.out.printf("--- LOTE COMPLETADO (Transacciones: %d OK: %d Fallidas: %d Tiempo transcurrido: %d s) ---\n",
+                    transactionsInBatch, completedInBatch, failedInBatch, timeElapsed);
 
-            // --- Fase de Pausa  ---
-            if (System.currentTimeMillis() < endTime) {
-                //  System.out.printf("Iniciando pausa de %d ms antes del siguiente lote.\n", PAUSE_TIME_MS);
+            if (transactionCounter < TOTAL_TRANSACTIONS) {
                 System.out.println("\n-- INICIANDO EL SIGUIENTE LOTE --");
-                /*
-                try {
-                    Thread.sleep(PAUSE_TIME_MS);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    System.err.println("El hilo principal fue interrumpido durante la pausa.");
-                    break;
-                }
-                 */
             }
         }
-        // Reporte final
+
+        long finishTime = System.currentTimeMillis();
+
         System.out.println("\n---------------------------------------------------------------------");
-        System.out.println("El tiempo total de ejecución ha finalizado.");
-        System.out.println("Total de Transacciones enviadas: " + transactionCounter + "");
+        System.out.println("Se han enviado todas las transacciones (" + TOTAL_TRANSACTIONS + ").");
         System.out.println("Iniciando apagado ordenado de servicios...");
-        // --- Apagado y Recolección de Resultados ---
+
         executor.shutdown();
         try {
-            // Esperar a que todas las tareas terminen
-            if (!executor.awaitTermination(TOTAL_RUN_TIME_SECONDS, TimeUnit.SECONDS)) {
+            if (!executor.awaitTermination(TRANSACTION_TIMEOUT_SECONDS * 3, TimeUnit.SECONDS)) {
                 System.out.println("\nLas tareas no terminaron a tiempo, forzando apagado.");
                 executor.shutdownNow();
             }
@@ -363,31 +330,28 @@ public class SignalRClient implements Runnable {
             Thread.currentThread().interrupt();
         }
 
-        // Usamos allFutures para el reporte final
         int completed = 0;
         int failed = 0;
 
         for (Future<String> future : allFutures) {
             try {
-                // Si la future fue cancelada por timeout, get() lanzará una CancellationException.
-                // Se usa un timeout breve aquí, pues la espera real ya se hizo en el bucle principal.
-                String result = future.get(1, TimeUnit.MILLISECONDS);
-                if (result.startsWith("[COMPLETADA]")) {
-                    completed++;
-                } else if (result.startsWith("[ERROR]") || result.startsWith("[FALLO FATAL]")) {
-                    failed++;
-                }
-            } catch (CancellationException e) {
-                // El futuro fue cancelado (probablemente por timeout en el lote)
+                future.get(1, TimeUnit.MILLISECONDS);
+                completed++;
+            } catch (CancellationException | TimeoutException e) {
+                failed++;
+            } catch (ExecutionException e) {
                 failed++;
             } catch (Exception e) {
                 failed++;
             }
         }
+
+        double totalRunTimeSeconds = (finishTime - startTime) / 1000.0;
+
         System.out.println("\n--- Resumen de Resultados ---");
         System.out.println("Transacciones Enviadas: " + transactionCounter);
-        System.out.println("Transacciones Completadas (OK): " + completed);
+        System.out.println("Transacciones Completadas (Aprox. OK): " + completed);
         System.out.println("Transacciones fallidas o con Timeout: " + failed);
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println("Duracion Total de las Pruebas: " + totalRunTimeSeconds + " segundos");
     }
 }
