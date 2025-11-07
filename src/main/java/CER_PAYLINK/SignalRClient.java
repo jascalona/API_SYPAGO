@@ -47,7 +47,7 @@ public class SignalRClient implements Callable<Boolean> {
 
             step2_establishConnection();
             if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
-                System.err.println("Descartando sesión " + sessionId + ": Conexión SignalR no establecida o fallida.");
+                System.err.println("Descartando sesion " + sessionId + ": Conexión SignalR no establecida o fallida.");
                 throw new RuntimeException("Fallo en la conexión SignalR.");
             }
 
@@ -126,16 +126,13 @@ public class SignalRClient implements Callable<Boolean> {
         if (hubConnection == null || hubConnection.getConnectionState() != com.microsoft.signalr.HubConnectionState.CONNECTED) {
             throw new IllegalStateException("La conexión SignalR no está activa.");
         }
-
         String publicKeyPem = getPublicKeyPem();
-
         try {
             String encryptedSymmetricKeyBase64 = hubConnection.invoke(
                             String.class,
                             "GetSymetricKey",
                             publicKeyPem
                     )
-
                     .blockingGet();
 
             // 2. Descifrar la clave simétrica con la llave privada RSA
@@ -195,7 +192,7 @@ public class SignalRClient implements Callable<Boolean> {
 
         System.out.println("\n=======================================================");
         System.out.println(" CLIENTE: " + sessionId + "\n" + transactionDataJson.substring(0, Math.min(transactionDataJson.length(), 500)) +
-                (transactionDataJson.length() > 500 ? "..." : ""));
+                (transactionDataJson));
         System.out.println("=======================================================\n");
     }
 
@@ -238,13 +235,12 @@ public class SignalRClient implements Callable<Boolean> {
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
 
-    // *** CORRECCIÓN: Se aumenta el THREAD_SIZE a 20 para evitar el encolamiento ***
-    private static final int THREAD_SIZE = 10;
+    private static final int THREAD_SIZE = 2; //Hilos de procesamiento en simultaneo
 
     // --- Configuración del Lote ---
-    private static final int BATCH_SIZE = 5;
-    private static final int TOTAL_TRANSACTIONS = 1000;
-    private static final long TRANSACTION_TIMEOUT_SECONDS = 30; //Timeout para mayor tolerancia y consistencia
+    private static final int BATCH_SIZE = 2;
+    private static final int TOTAL_TRANSACTIONS = 10;
+    private static final long TRANSACTION_TIMEOUT_SECONDS = 20; //Timeout para mayor tolerancia y consistencia
 
     public static void main(String[] args) throws IOException {
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_SIZE);
