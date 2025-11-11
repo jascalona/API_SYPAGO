@@ -10044,7 +10044,7 @@ assert status == "RJCT"; // Aserción para el campo Status
 def rejectedCode = jsonResponse.RejectedCode;
 log.info("Código de rechazo: " + rejectedCode);
 assert rejectedCode == "MD01"; // Aserción para el campo RejectedCode
-</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="a5b75414-bfbf-4586-90ba-c6a5ac5747d7" name="GV2-VOL"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>50</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>33333</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="81a76d78-6fc2-4b99-a0d5-4781de9916fa" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="SOLID_OTP" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="SOLID_OTP" id="fa89d223-573b-4dfe-afb1-2f51bb971f48" disabled="true"><con:settings/><con:config service="http://10.0.62.20:8086" methodName="Method 1" resourcePath="/api/v1/token/otp/generate" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLID_OTP" id="c1ae596d-6d21-4402-a0a8-eb5f4238c551" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Authorization" value="Basic c3lnYXRld2F5X3VzZXI6c0I1STJsUk81SnhoMWlhNDdTN0t2bnlMUg==" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.0.62.20:8088</con:endpoint><con:request>{
+</scriptText></con:configuration></con:assertion><con:credentials><con:username>${#Project#user}</con:username><con:password>${#Project#password}</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest id="a5b75414-bfbf-4586-90ba-c6a5ac5747d7" name="GV2-VOL"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>50</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>33333</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase id="81a76d78-6fc2-4b99-a0d5-4781de9916fa" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="SOLID_OTP" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="SOLID_OTP" id="fa89d223-573b-4dfe-afb1-2f51bb971f48"><con:settings/><con:config service="http://10.0.62.20:8086" methodName="Method 1" resourcePath="/api/v1/token/otp/generate" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="SOLID_OTP" id="c1ae596d-6d21-4402-a0a8-eb5f4238c551" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Authorization" value="Basic c3lnYXRld2F5X3VzZXI6c0I1STJsUk81SnhoMWlhNDdTN0t2bnlMUg==" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://10.0.62.20:8088</con:endpoint><con:request>{
    "AuthstnReq":{
       "GrpHdr":{
          "MsgId":"0114012025052608091300000375",
@@ -10060,25 +10060,25 @@ assert rejectedCode == "MD01"; // Aserción para el campo RejectedCode
                "Ccy":"VES",
                "Amt":50
             },
-            "DbtrAgt":"0114",
+            "DbtrAgt":"0168",
             "DbtrAcct":{
-               "Tp":"CNTA",
-               "Id":"01140165111650173291"
+               "Tp":"CELE",
+               "Id":"4129854529"
             },
             "Dbtr":{
                "Nm":"BANCRECER",
-               "Id":"V18556186",
-               "SchmeNm":"SCID"
+               "Id":"P352036",
+               "SchmeNm":"SPAS"
             },
             "CdtrAgt":"0114",
             "Cdtr":{
                "Nm":"CUENTA BANCARIBE",
-               "Id":"J506512750",
+               "Id":"J315000857",
                "SchmeNm":"SRIF"
             },
             "CdtrAcct":{
-               "Tp":"CNTA",
-               "Id":"01140172491720070037"
+               "Tp":"CELE",
+               "Id":"4229158775"
             }
          }
       ]
@@ -10105,37 +10105,37 @@ assert rejectedCode == "MD01"; // Aserción para el campo RejectedCode
    "ProductSypago":"DEBIT",
    "SubProductSypago":"SYPAGO",
    "ApprovalAgent":"OTHE",
-   "IssuingAgent":"0168",
+   "IssuingAgent":"0114",
    "IssuingUser":{
       "UserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
       "LinkUserId":"7b5ba9cc-b7bc-446f-94b6-f1de2a0baa35",
       "Account":{
          "Tp":"CNTA",
-         "Id":"01140172491720070037"
+         "Id":"01140166011660034613"
       },
       "Document":{
          "Nm":"Orlando Empresa",
-         "Id":"J506512750",
+         "Id":"J315000857",
          "SchmeNm":"SRIF"
       },
       "Concept":"CONCEPTO-18AAEFDEFAEF"
    },
-   "ReceivingAgent":"0114",
+   "ReceivingAgent":"0168",
    "ReceivingUser":{
       "UserId":"",
       "LinkUserId":"",
       "Account":{
-         "Tp":"CNTA",
-         "Id":"01140165111650173291"
+         "Tp":"CELE",
+         "Id":"4129854529"
       },
       "Document":{
          "Nm":"bancaribe",
-         "Id":"V18556186",
+         "Id":"E84477736",
          "SchmeNm":"SCID"
       },
       "Concept":""
    },
-   "PayKey":"12345678"
+   "PayKey":"49159887"
 }</con:request><con:originalUri>https://10.0.62.20/api/v1/transaction</con:originalUri><con:assertion type="Valid HTTP Status Codes" id="297947b3-2125-4a7d-8118-75636b269458" name="Valid HTTP Status Codes"><con:configuration><codes>201</codes></con:configuration></con:assertion><con:assertion type="GroovyScriptAssertion" id="97ad98bb-9251-47bc-8a99-af6455555002" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
 import Bancrecer.GatewayV2.GV2; //Nueva clase para el caso de bancrecer
 
@@ -10196,7 +10196,7 @@ switch (statusCode){
 				assert TxSt == "RJCT"
 				def Rns = response.RejectedCode
 				log.info (TxSt + "/" + Rns)
-				assert Rns == "TKCM"		
+				assert Rns == ""		
 			}
 			else{
 				log.info(TxSt)

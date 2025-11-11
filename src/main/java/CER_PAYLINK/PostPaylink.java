@@ -1,13 +1,9 @@
 package CER_PAYLINK;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.w3c.dom.Node;
 
-import javax.xml.crypto.Data;
-import javax.xml.transform.sax.SAXSource;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Base64;
