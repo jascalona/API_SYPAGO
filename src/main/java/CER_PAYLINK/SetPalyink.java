@@ -24,6 +24,8 @@ public class SetPalyink {
             String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
            // System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
 
+
+
         }
     }
 }

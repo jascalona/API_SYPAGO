@@ -28,7 +28,6 @@ public class PostPaylink
         this.internal_id = internal_id;
         this.group_id = group_id;
     }
-
     public String getInternal_id() {
         return this.internal_id;
     }
@@ -290,7 +289,6 @@ public class PostPaylink
             return responseError.toString();
         }
     }
-
 
     //Solicitud del SesionId
     public String  obtain_sesionId(String token, String sesionURL) throws IOException {
