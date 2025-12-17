@@ -12,15 +12,15 @@ import java.util.concurrent.*;
 public class InitAndClose {
 
     // Nota: THREAD_SIZE = 2 y TOTAL_TRANSACTIONS = 2
-    private static final int THREAD_SIZE = 10; // Hilos de procesamiento en simultaneo
+    private static final int THREAD_SIZE = 30; // Hilos de procesamiento en simultaneo
 
     // --- Configuración del Lote ---
     private static final int BATCH_SIZE = 2;
-    private static final int TOTAL_TRANSACTIONS = 1000;
-    private static final long TRANSACTION_TIMEOUT_SECONDS = 60000;
+    private static final int TOTAL_TRANSACTIONS = 3;
+    private static final long TRANSACTION_TIMEOUT_SECONDS = 20000;
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         // Inicializa el pool de 2 hilos
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_SIZE);
 
@@ -46,13 +46,24 @@ public class InitAndClose {
 
             // init operation: Somete las tareas al pool
             List<Future<String>> postFutures = new ArrayList<>();
+            StringBuilder url =new StringBuilder();
             for (int i = 0; i < transactionsInBatch; i++) {
                 PostPaylink init_operation = new PostPaylink(
                         LabelTransacionID.UIDD(12),
-                        LabelTransacionID.UIDD(12)
-                );
+                        "MANTEQUILLA");
+
+
                 // Somete la tarea al pool.
                 Future<String> future = executor.submit(new PostTask(token, init_operation));
+                // Inject to group_id
+
+                String transactionID = future.get();
+
+                String urlweb = "https://pruebas.sypago.net:8086/api/v1/transaction/" + transactionID;
+                String groupid = init_operation.getPaylink(token, urlweb);
+
+                System.out.println("GROUP_ID :" + groupid);
+
                 postFutures.add(future);
             }
 

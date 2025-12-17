@@ -372,11 +372,11 @@ public class PostPaylink
             try {
                 ObjectMapper mapper =new ObjectMapper();
                 JsonNode rootNode = mapper.readTree(response.toString());
-                JsonNode transactionId = rootNode.get("transaction_id");
-                JsonNode statusNode = rootNode.get("status");
+                JsonNode groupID = rootNode.get("group_id");
+                //JsonNode statusNode = rootNode.get("status");
 
-                if (transactionId != null || statusNode != null){
-                    transaccion.append(transactionId.asText() + " | " + statusNode.asText());
+                if (groupID != null /*|| statusNode != null*/){
+                    transaccion.append(groupID.asText()); // para las pruebas de cancelacion se elimino la etiqueta status
                 }
                 else {
                     System.out.println("No se encontraron los nodos");

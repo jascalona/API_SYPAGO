@@ -18,7 +18,7 @@ class PostTask implements Callable<String> {
     public String call() throws Exception {
         // Esto se ejecuta en un hilo del pool
         String id = initOperation.postPaylink(token);
-        System.out.println("Hilo: " + Thread.currentThread().getName() + " - Publicado ID: " + id);
+        System.out.println("transaction_id: " + Thread.currentThread().getName() + " - Publicado ID: " + id);
         return id;
     }
 }

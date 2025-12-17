@@ -19,13 +19,20 @@ import java.util.ArrayList;
 public class CloseTransactions {
 
     private ArrayList transaction_id;
+    private String groupid;
     private final String API_URL = "https://pruebas.sypago.net:8086/api/v1/transactions/cancel";
+
+
 
     public CloseTransactions(ArrayList transaction_id){
         if (transaction_id == null || transaction_id.isEmpty()){
             System.out.println("Error al procesar la lista de IDs");
         }
         this.transaction_id = transaction_id;
+    }
+
+    public CloseTransactions(String group_id){
+        this.groupid = group_id;
     }
 
 
@@ -40,7 +47,7 @@ public class CloseTransactions {
         try(DataOutputStream os = new DataOutputStream(connection.getOutputStream())){
             //Envio de datos
             ArrayList<String> transacion_id = this.transaction_id;
-            String filter_type = "transaction_id";
+            String filter_type = "group_id";
 
             String idsJsonArrayContent = transacion_id.stream()
                     .map(s -> "\"" + s + "\"") // Agrega comillas dobles a cada elemento
