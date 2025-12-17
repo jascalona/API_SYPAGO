@@ -53,7 +53,7 @@ public class PostPaylink
             String group_id = this.group_id;
             String bank_code = "0001";
             String type = "CNTA";
-            String number = "00018349143957065141";
+            String number = "00017903572873691116";
             String typeAmo = "ALMM";
             int amt = 1;
             String currency = "VES";

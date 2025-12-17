@@ -92,7 +92,7 @@ public class CloseTransactions {
         PostPaylink generate_operation =new  PostPaylink(internal_id, group_id);
         ArrayList operations =new ArrayList();
 
-        int contador = 1;
+        int contador = 5;
         for (int i=0; i < contador; i++){
             String generate = generate_operation.postPaylink(token);
             operations.add(generate);

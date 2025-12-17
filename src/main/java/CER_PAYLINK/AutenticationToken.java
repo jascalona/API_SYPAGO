@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AutenticationToken {
 
     public static String newToken() throws IOException {
-        final String USER = "jose";
-        final String API_KEY = "LlPhr4UguzAEIoAkuLJW0szJziuxt2o6";
+        final String USER = "jescalona";
+        final String API_KEY = "ujcOQTByyOPscO1i3fTQZREuAQLxzHWp";
         final String endpoint = "https://pruebas.sypago.net:8086/api/v1/auth/token";
 
         URL url = new URL(endpoint);

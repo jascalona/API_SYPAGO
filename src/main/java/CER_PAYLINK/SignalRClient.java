@@ -235,11 +235,11 @@ public class SignalRClient implements Callable<Boolean> {
     //                                  MAIN
     // --------------------------------------------------------------------------------------------------
 
-    private static final int THREAD_SIZE = 2; //Hilos de procesamiento en simultaneo
+    private static final int THREAD_SIZE = 10; //Hilos de procesamiento en simultaneo
 
     // --- Configuración del Lote ---
     private static final int BATCH_SIZE = 2;
-    private static final int TOTAL_TRANSACTIONS = 10;
+    private static final int TOTAL_TRANSACTIONS = 2;
     private static final long TRANSACTION_TIMEOUT_SECONDS = 20; //Timeout para mayor tolerancia y consistencia
 
     public static void main(String[] args) throws IOException {

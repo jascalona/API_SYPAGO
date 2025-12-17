@@ -1,11 +1,16 @@
 package CER_PAYLINK;
 
+import CER_PAYLINK.RELEASE_NOTE.CloseTransactions;
 import Utiliti.LabelTransacionID;
 
 import javax.management.RuntimeMBeanException;
 import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.concurrent.*;
 
 public class SetPalyink {
+
     public static void main(String[] args) throws IOException {
 
         //Generar la Iniciacion y solicitud de la transaccion
@@ -22,9 +27,7 @@ public class SetPalyink {
 
             //Generar la transaccion y el SesionId
             String sesionURL = "https://pruebas.app.sypago.net:8086/api/v1/transaction/checkout?id="+datosConstructor.postPaylink(token)+"&blueprint=false";
-           // System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
-
-
+            // System.out.println(datosConstructor.obtain_sesionId(token, sesionURL));
 
         }
     }
